@@ -1,0 +1,318 @@
+Namespace(device=0, log_steps=1, inductive=False, num_layers=3, hidden_channels=256, dropout=0.5, batch_size=20000, walk_length=3, lr=0.01, num_steps=30, epochs=20, eval_steps=2, runs=10, rsv=0.3, al='mem', alpha=0.6)
+tensor([147936, 100314,   1272,  ...,  75531, 149161, 194245]) 58985
+tensor([222340, 232877, 217134,  ..., 213931, 229892, 206464]) 11796
+Run: 01, Epoch: 01, Loss: 1.5995
+Run: 01, Epoch: 02, Loss: 0.7414
+Run: 01, Epoch: 03, Loss: 0.6452
+Run: 01, Epoch: 04, Loss: 0.5997
+Run: 01, Epoch: 05, Loss: 0.5769
+Run: 01, Epoch: 06, Loss: 0.5537
+Run: 01, Epoch: 07, Loss: 0.5328
+Run: 01, Epoch: 08, Loss: 0.5300
+Run: 01, Epoch: 09, Loss: 0.5158
+Run: 01, Epoch: 10, Loss: 0.5179
+Run: 01, Epoch: 10, Train: 87.28%, Valid: 90.59% Test: 78.03%
+Run: 01, Epoch: 11, Loss: 0.5040
+Run: 01, Epoch: 12, Loss: 0.4924
+Run: 01, Epoch: 12, Train: 87.67%, Valid: 90.79% Test: 77.86%
+Run: 01, Epoch: 13, Loss: 0.4928
+Run: 01, Epoch: 14, Loss: 0.4885
+Run: 01, Epoch: 14, Train: 87.93%, Valid: 90.97% Test: 78.37%
+Run: 01, Epoch: 15, Loss: 0.4827
+Run: 01, Epoch: 16, Loss: 0.4806
+Run: 01, Epoch: 16, Train: 88.16%, Valid: 91.07% Test: 78.10%
+Run: 01, Epoch: 17, Loss: 0.4777
+Run: 01, Epoch: 18, Loss: 0.4779
+Run: 01, Epoch: 18, Train: 88.43%, Valid: 90.91% Test: 77.43%
+Run: 01, Epoch: 19, Loss: 0.4789
+Run: 01, Epoch: 20, Loss: 0.4801
+Run: 01, Epoch: 20, Train: 88.36%, Valid: 91.24% Test: 77.75%
+Run 01:
+Highest Train: 88.43
+Highest Valid: 91.24
+  Final Train: 88.36
+   Final Test: 77.75
+Run: 02, Epoch: 01, Loss: 1.7171
+Run: 02, Epoch: 02, Loss: 0.7624
+Run: 02, Epoch: 03, Loss: 0.6548
+Run: 02, Epoch: 04, Loss: 0.6112
+Run: 02, Epoch: 05, Loss: 0.5777
+Run: 02, Epoch: 06, Loss: 0.5560
+Run: 02, Epoch: 07, Loss: 0.5422
+Run: 02, Epoch: 08, Loss: 0.5335
+Run: 02, Epoch: 09, Loss: 0.5336
+Run: 02, Epoch: 10, Loss: 0.5178
+Run: 02, Epoch: 10, Train: 87.26%, Valid: 90.69% Test: 78.48%
+Run: 02, Epoch: 11, Loss: 0.5092
+Run: 02, Epoch: 12, Loss: 0.5048
+Run: 02, Epoch: 12, Train: 87.44%, Valid: 90.93% Test: 77.95%
+Run: 02, Epoch: 13, Loss: 0.4952
+Run: 02, Epoch: 14, Loss: 0.5005
+Run: 02, Epoch: 14, Train: 87.56%, Valid: 90.91% Test: 78.06%
+Run: 02, Epoch: 15, Loss: 0.4961
+Run: 02, Epoch: 16, Loss: 0.4919
+Run: 02, Epoch: 16, Train: 87.97%, Valid: 91.15% Test: 78.67%
+Run: 02, Epoch: 17, Loss: 0.4902
+Run: 02, Epoch: 18, Loss: 0.4876
+Run: 02, Epoch: 18, Train: 88.24%, Valid: 90.96% Test: 77.55%
+Run: 02, Epoch: 19, Loss: 0.4801
+Run: 02, Epoch: 20, Loss: 0.4835
+Run: 02, Epoch: 20, Train: 88.03%, Valid: 91.06% Test: 78.16%
+Run 02:
+Highest Train: 88.24
+Highest Valid: 91.15
+  Final Train: 87.97
+   Final Test: 78.67
+Run: 03, Epoch: 01, Loss: 1.6730
+Run: 03, Epoch: 02, Loss: 0.7566
+Run: 03, Epoch: 03, Loss: 0.6558
+Run: 03, Epoch: 04, Loss: 0.6117
+Run: 03, Epoch: 05, Loss: 0.5795
+Run: 03, Epoch: 06, Loss: 0.5654
+Run: 03, Epoch: 07, Loss: 0.5487
+Run: 03, Epoch: 08, Loss: 0.5347
+Run: 03, Epoch: 09, Loss: 0.5316
+Run: 03, Epoch: 10, Loss: 0.5137
+Run: 03, Epoch: 10, Train: 86.99%, Valid: 90.65% Test: 77.31%
+Run: 03, Epoch: 11, Loss: 0.5083
+Run: 03, Epoch: 12, Loss: 0.5068
+Run: 03, Epoch: 12, Train: 87.43%, Valid: 91.09% Test: 77.84%
+Run: 03, Epoch: 13, Loss: 0.5010
+Run: 03, Epoch: 14, Loss: 0.4940
+Run: 03, Epoch: 14, Train: 87.84%, Valid: 91.01% Test: 78.01%
+Run: 03, Epoch: 15, Loss: 0.4908
+Run: 03, Epoch: 16, Loss: 0.4965
+Run: 03, Epoch: 16, Train: 87.77%, Valid: 90.89% Test: 78.21%
+Run: 03, Epoch: 17, Loss: 0.4878
+Run: 03, Epoch: 18, Loss: 0.4871
+Run: 03, Epoch: 18, Train: 87.88%, Valid: 91.08% Test: 78.11%
+Run: 03, Epoch: 19, Loss: 0.4825
+Run: 03, Epoch: 20, Loss: 0.4789
+Run: 03, Epoch: 20, Train: 88.24%, Valid: 91.28% Test: 76.97%
+Run 03:
+Highest Train: 88.24
+Highest Valid: 91.28
+  Final Train: 88.24
+   Final Test: 76.97
+Run: 04, Epoch: 01, Loss: 1.5852
+Run: 04, Epoch: 02, Loss: 0.7423
+Run: 04, Epoch: 03, Loss: 0.6443
+Run: 04, Epoch: 04, Loss: 0.6011
+Run: 04, Epoch: 05, Loss: 0.5737
+Run: 04, Epoch: 06, Loss: 0.5588
+Run: 04, Epoch: 07, Loss: 0.5472
+Run: 04, Epoch: 08, Loss: 0.5304
+Run: 04, Epoch: 09, Loss: 0.5250
+Run: 04, Epoch: 10, Loss: 0.5128
+Run: 04, Epoch: 10, Train: 87.41%, Valid: 91.06% Test: 78.02%
+Run: 04, Epoch: 11, Loss: 0.5036
+Run: 04, Epoch: 12, Loss: 0.4991
+Run: 04, Epoch: 12, Train: 87.57%, Valid: 90.84% Test: 77.99%
+Run: 04, Epoch: 13, Loss: 0.4973
+Run: 04, Epoch: 14, Loss: 0.4906
+Run: 04, Epoch: 14, Train: 87.88%, Valid: 91.24% Test: 77.35%
+Run: 04, Epoch: 15, Loss: 0.4885
+Run: 04, Epoch: 16, Loss: 0.4938
+Run: 04, Epoch: 16, Train: 88.12%, Valid: 91.19% Test: 78.24%
+Run: 04, Epoch: 17, Loss: 0.4871
+Run: 04, Epoch: 18, Loss: 0.4812
+Run: 04, Epoch: 18, Train: 88.38%, Valid: 91.10% Test: 77.07%
+Run: 04, Epoch: 19, Loss: 0.4810
+Run: 04, Epoch: 20, Loss: 0.4721
+Run: 04, Epoch: 20, Train: 88.40%, Valid: 91.26% Test: 78.41%
+Run 04:
+Highest Train: 88.40
+Highest Valid: 91.26
+  Final Train: 88.40
+   Final Test: 78.41
+Run: 05, Epoch: 01, Loss: 1.4841
+Run: 05, Epoch: 02, Loss: 0.7259
+Run: 05, Epoch: 03, Loss: 0.6345
+Run: 05, Epoch: 04, Loss: 0.5905
+Run: 05, Epoch: 05, Loss: 0.5608
+Run: 05, Epoch: 06, Loss: 0.5406
+Run: 05, Epoch: 07, Loss: 0.5364
+Run: 05, Epoch: 08, Loss: 0.5233
+Run: 05, Epoch: 09, Loss: 0.5147
+Run: 05, Epoch: 10, Loss: 0.5080
+Run: 05, Epoch: 10, Train: 87.41%, Valid: 90.79% Test: 77.78%
+Run: 05, Epoch: 11, Loss: 0.5022
+Run: 05, Epoch: 12, Loss: 0.4936
+Run: 05, Epoch: 12, Train: 87.76%, Valid: 90.80% Test: 78.03%
+Run: 05, Epoch: 13, Loss: 0.4916
+Run: 05, Epoch: 14, Loss: 0.4927
+Run: 05, Epoch: 14, Train: 87.90%, Valid: 91.03% Test: 78.31%
+Run: 05, Epoch: 15, Loss: 0.4885
+Run: 05, Epoch: 16, Loss: 0.4800
+Run: 05, Epoch: 16, Train: 87.97%, Valid: 91.10% Test: 77.89%
+Run: 05, Epoch: 17, Loss: 0.4741
+Run: 05, Epoch: 18, Loss: 0.4700
+Run: 05, Epoch: 18, Train: 88.18%, Valid: 91.29% Test: 78.08%
+Run: 05, Epoch: 19, Loss: 0.4679
+Run: 05, Epoch: 20, Loss: 0.4764
+Run: 05, Epoch: 20, Train: 88.54%, Valid: 91.12% Test: 77.67%
+Run 05:
+Highest Train: 88.54
+Highest Valid: 91.29
+  Final Train: 88.18
+   Final Test: 78.08
+Run: 06, Epoch: 01, Loss: 1.5169
+Run: 06, Epoch: 02, Loss: 0.7286
+Run: 06, Epoch: 03, Loss: 0.6437
+Run: 06, Epoch: 04, Loss: 0.5970
+Run: 06, Epoch: 05, Loss: 0.5747
+Run: 06, Epoch: 06, Loss: 0.5556
+Run: 06, Epoch: 07, Loss: 0.5377
+Run: 06, Epoch: 08, Loss: 0.5267
+Run: 06, Epoch: 09, Loss: 0.5182
+Run: 06, Epoch: 10, Loss: 0.5187
+Run: 06, Epoch: 10, Train: 87.34%, Valid: 91.11% Test: 78.28%
+Run: 06, Epoch: 11, Loss: 0.5036
+Run: 06, Epoch: 12, Loss: 0.4983
+Run: 06, Epoch: 12, Train: 87.97%, Valid: 91.27% Test: 77.51%
+Run: 06, Epoch: 13, Loss: 0.4909
+Run: 06, Epoch: 14, Loss: 0.4842
+Run: 06, Epoch: 14, Train: 88.07%, Valid: 91.06% Test: 78.28%
+Run: 06, Epoch: 15, Loss: 0.4785
+Run: 06, Epoch: 16, Loss: 0.4827
+Run: 06, Epoch: 16, Train: 88.12%, Valid: 90.95% Test: 77.64%
+Run: 06, Epoch: 17, Loss: 0.4823
+Run: 06, Epoch: 18, Loss: 0.4736
+Run: 06, Epoch: 18, Train: 88.49%, Valid: 91.12% Test: 78.23%
+Run: 06, Epoch: 19, Loss: 0.4757
+Run: 06, Epoch: 20, Loss: 0.4763
+Run: 06, Epoch: 20, Train: 88.62%, Valid: 91.14% Test: 78.15%
+Run 06:
+Highest Train: 88.62
+Highest Valid: 91.27
+  Final Train: 87.97
+   Final Test: 77.51
+Run: 07, Epoch: 01, Loss: 1.7022
+Run: 07, Epoch: 02, Loss: 0.7694
+Run: 07, Epoch: 03, Loss: 0.6671
+Run: 07, Epoch: 04, Loss: 0.6103
+Run: 07, Epoch: 05, Loss: 0.5826
+Run: 07, Epoch: 06, Loss: 0.5626
+Run: 07, Epoch: 07, Loss: 0.5451
+Run: 07, Epoch: 08, Loss: 0.5311
+Run: 07, Epoch: 09, Loss: 0.5266
+Run: 07, Epoch: 10, Loss: 0.5251
+Run: 07, Epoch: 10, Train: 86.97%, Valid: 90.77% Test: 77.09%
+Run: 07, Epoch: 11, Loss: 0.5172
+Run: 07, Epoch: 12, Loss: 0.5091
+Run: 07, Epoch: 12, Train: 87.43%, Valid: 90.85% Test: 77.91%
+Run: 07, Epoch: 13, Loss: 0.4966
+Run: 07, Epoch: 14, Loss: 0.4905
+Run: 07, Epoch: 14, Train: 87.83%, Valid: 90.95% Test: 78.67%
+Run: 07, Epoch: 15, Loss: 0.4887
+Run: 07, Epoch: 16, Loss: 0.4941
+Run: 07, Epoch: 16, Train: 88.09%, Valid: 91.14% Test: 77.91%
+Run: 07, Epoch: 17, Loss: 0.4867
+Run: 07, Epoch: 18, Loss: 0.4865
+Run: 07, Epoch: 18, Train: 88.23%, Valid: 91.22% Test: 77.90%
+Run: 07, Epoch: 19, Loss: 0.4812
+Run: 07, Epoch: 20, Loss: 0.4807
+Run: 07, Epoch: 20, Train: 88.35%, Valid: 91.24% Test: 78.34%
+Run 07:
+Highest Train: 88.35
+Highest Valid: 91.24
+  Final Train: 88.35
+   Final Test: 78.34
+Run: 08, Epoch: 01, Loss: 1.4576
+Run: 08, Epoch: 02, Loss: 0.7210
+Run: 08, Epoch: 03, Loss: 0.6312
+Run: 08, Epoch: 04, Loss: 0.5828
+Run: 08, Epoch: 05, Loss: 0.5623
+Run: 08, Epoch: 06, Loss: 0.5388
+Run: 08, Epoch: 07, Loss: 0.5223
+Run: 08, Epoch: 08, Loss: 0.5208
+Run: 08, Epoch: 09, Loss: 0.5182
+Run: 08, Epoch: 10, Loss: 0.5049
+Run: 08, Epoch: 10, Train: 87.35%, Valid: 90.85% Test: 77.34%
+Run: 08, Epoch: 11, Loss: 0.5058
+Run: 08, Epoch: 12, Loss: 0.4913
+Run: 08, Epoch: 12, Train: 88.05%, Valid: 90.99% Test: 78.39%
+Run: 08, Epoch: 13, Loss: 0.4831
+Run: 08, Epoch: 14, Loss: 0.4825
+Run: 08, Epoch: 14, Train: 88.23%, Valid: 91.27% Test: 78.31%
+Run: 08, Epoch: 15, Loss: 0.4794
+Run: 08, Epoch: 16, Loss: 0.4852
+Run: 08, Epoch: 16, Train: 88.29%, Valid: 91.26% Test: 77.90%
+Run: 08, Epoch: 17, Loss: 0.4802
+Run: 08, Epoch: 18, Loss: 0.4819
+Run: 08, Epoch: 18, Train: 88.56%, Valid: 91.01% Test: 77.80%
+Run: 08, Epoch: 19, Loss: 0.4695
+Run: 08, Epoch: 20, Loss: 0.4680
+Run: 08, Epoch: 20, Train: 88.55%, Valid: 91.29% Test: 78.15%
+Run 08:
+Highest Train: 88.56
+Highest Valid: 91.29
+  Final Train: 88.55
+   Final Test: 78.15
+Run: 09, Epoch: 01, Loss: 1.5232
+Run: 09, Epoch: 02, Loss: 0.7192
+Run: 09, Epoch: 03, Loss: 0.6245
+Run: 09, Epoch: 04, Loss: 0.5898
+Run: 09, Epoch: 05, Loss: 0.5635
+Run: 09, Epoch: 06, Loss: 0.5451
+Run: 09, Epoch: 07, Loss: 0.5352
+Run: 09, Epoch: 08, Loss: 0.5249
+Run: 09, Epoch: 09, Loss: 0.5151
+Run: 09, Epoch: 10, Loss: 0.5044
+Run: 09, Epoch: 10, Train: 87.55%, Valid: 90.79% Test: 77.79%
+Run: 09, Epoch: 11, Loss: 0.5020
+Run: 09, Epoch: 12, Loss: 0.4863
+Run: 09, Epoch: 12, Train: 87.70%, Valid: 90.84% Test: 77.37%
+Run: 09, Epoch: 13, Loss: 0.4909
+Run: 09, Epoch: 14, Loss: 0.4895
+Run: 09, Epoch: 14, Train: 88.15%, Valid: 91.08% Test: 77.70%
+Run: 09, Epoch: 15, Loss: 0.4843
+Run: 09, Epoch: 16, Loss: 0.4801
+Run: 09, Epoch: 16, Train: 88.12%, Valid: 91.12% Test: 78.18%
+Run: 09, Epoch: 17, Loss: 0.4692
+Run: 09, Epoch: 18, Loss: 0.4721
+Run: 09, Epoch: 18, Train: 88.53%, Valid: 91.39% Test: 77.46%
+Run: 09, Epoch: 19, Loss: 0.4737
+Run: 09, Epoch: 20, Loss: 0.4746
+Run: 09, Epoch: 20, Train: 88.68%, Valid: 91.08% Test: 78.41%
+Run 09:
+Highest Train: 88.68
+Highest Valid: 91.39
+  Final Train: 88.53
+   Final Test: 77.46
+Run: 10, Epoch: 01, Loss: 1.5759
+Run: 10, Epoch: 02, Loss: 0.7395
+Run: 10, Epoch: 03, Loss: 0.6422
+Run: 10, Epoch: 04, Loss: 0.6016
+Run: 10, Epoch: 05, Loss: 0.5745
+Run: 10, Epoch: 06, Loss: 0.5537
+Run: 10, Epoch: 07, Loss: 0.5325
+Run: 10, Epoch: 08, Loss: 0.5306
+Run: 10, Epoch: 09, Loss: 0.5227
+Run: 10, Epoch: 10, Loss: 0.5099
+Run: 10, Epoch: 10, Train: 87.50%, Valid: 90.84% Test: 77.72%
+Run: 10, Epoch: 11, Loss: 0.4991
+Run: 10, Epoch: 12, Loss: 0.4904
+Run: 10, Epoch: 12, Train: 87.57%, Valid: 91.12% Test: 78.78%
+Run: 10, Epoch: 13, Loss: 0.4995
+Run: 10, Epoch: 14, Loss: 0.4904
+Run: 10, Epoch: 14, Train: 87.89%, Valid: 90.90% Test: 78.79%
+Run: 10, Epoch: 15, Loss: 0.4977
+Run: 10, Epoch: 16, Loss: 0.4828
+Run: 10, Epoch: 16, Train: 88.14%, Valid: 90.99% Test: 78.48%
+Run: 10, Epoch: 17, Loss: 0.4780
+Run: 10, Epoch: 18, Loss: 0.4805
+Run: 10, Epoch: 18, Train: 88.20%, Valid: 91.25% Test: 78.45%
+Run: 10, Epoch: 19, Loss: 0.4789
+Run: 10, Epoch: 20, Loss: 0.4835
+Run: 10, Epoch: 20, Train: 88.36%, Valid: 91.04% Test: 78.20%
+Run 10:
+Highest Train: 88.36
+Highest Valid: 91.25
+  Final Train: 88.20
+   Final Test: 78.45
+All runs:
+Highest Train: 88.44 ± 0.15
+Highest Valid: 91.27 ± 0.06
+  Final Train: 88.28 ± 0.20
+   Final Test: 77.98 ± 0.54
