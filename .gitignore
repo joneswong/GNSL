@@ -1,2 +1,4 @@
+*.pt
+*.pdf
 dataset
 __pycache__

@@ -1,0 +1,356 @@
+Namespace(device=0, log_steps=1, use_node_embedding=False, use_sgc_embedding=True, num_sgc_iterations=3, num_layers=3, hidden_channels=256, dropout=0, lr=0.01, batch_size=256, epochs=30, runs=10, rsv=0.2)
+Run: 01, Epoch: 01, Train: 59.83%, Valid: 56.24%, Test: 54.85%
+Run: 01, Epoch: 02, Train: 60.33%, Valid: 55.54%, Test: 53.97%
+Run: 01, Epoch: 03, Train: 62.94%, Valid: 59.17%, Test: 57.18%
+Run: 01, Epoch: 04, Train: 63.23%, Valid: 59.27%, Test: 57.89%
+Run: 01, Epoch: 05, Train: 64.25%, Valid: 59.31%, Test: 57.30%
+Run: 01, Epoch: 06, Train: 63.91%, Valid: 59.26%, Test: 57.51%
+Run: 01, Epoch: 07, Train: 65.35%, Valid: 63.12%, Test: 60.82%
+Run: 01, Epoch: 08, Train: 65.28%, Valid: 63.35%, Test: 60.73%
+Run: 01, Epoch: 09, Train: 64.67%, Valid: 59.07%, Test: 56.60%
+Run: 01, Epoch: 10, Train: 65.39%, Valid: 62.95%, Test: 59.55%
+Run: 01, Epoch: 11, Train: 65.80%, Valid: 61.96%, Test: 60.06%
+Run: 01, Epoch: 12, Train: 66.43%, Valid: 61.45%, Test: 59.08%
+Run: 01, Epoch: 13, Train: 66.82%, Valid: 61.02%, Test: 59.19%
+Run: 01, Epoch: 14, Train: 66.69%, Valid: 61.12%, Test: 59.31%
+Run: 01, Epoch: 15, Train: 67.48%, Valid: 63.14%, Test: 60.78%
+Run: 01, Epoch: 16, Train: 67.82%, Valid: 62.06%, Test: 60.04%
+Run: 01, Epoch: 17, Train: 68.07%, Valid: 62.68%, Test: 60.80%
+Run: 01, Epoch: 18, Train: 67.84%, Valid: 62.98%, Test: 60.34%
+Run: 01, Epoch: 19, Train: 67.71%, Valid: 61.49%, Test: 59.78%
+Run: 01, Epoch: 20, Train: 68.14%, Valid: 62.29%, Test: 59.99%
+Run: 01, Epoch: 21, Train: 68.74%, Valid: 64.24%, Test: 60.90%
+Run: 01, Epoch: 22, Train: 68.71%, Valid: 62.86%, Test: 60.67%
+Run: 01, Epoch: 23, Train: 68.39%, Valid: 63.73%, Test: 61.13%
+Run: 01, Epoch: 24, Train: 69.12%, Valid: 62.04%, Test: 59.74%
+Run: 01, Epoch: 25, Train: 68.81%, Valid: 61.89%, Test: 59.58%
+Run: 01, Epoch: 26, Train: 69.52%, Valid: 63.07%, Test: 60.42%
+Run: 01, Epoch: 27, Train: 68.86%, Valid: 62.79%, Test: 60.69%
+Run: 01, Epoch: 28, Train: 68.84%, Valid: 61.56%, Test: 60.02%
+Run: 01, Epoch: 29, Train: 69.12%, Valid: 64.10%, Test: 60.89%
+Run: 01, Epoch: 30, Train: 69.21%, Valid: 64.24%, Test: 61.32%
+Run 01:
+Highest Train: 69.52
+Highest Valid: 64.24
+  Final Train: 69.21
+   Final Test: 61.32
+Run: 02, Epoch: 01, Train: 59.13%, Valid: 56.40%, Test: 54.24%
+Run: 02, Epoch: 02, Train: 60.45%, Valid: 59.58%, Test: 57.29%
+Run: 02, Epoch: 03, Train: 62.75%, Valid: 60.76%, Test: 58.94%
+Run: 02, Epoch: 04, Train: 62.94%, Valid: 62.24%, Test: 60.12%
+Run: 02, Epoch: 05, Train: 63.67%, Valid: 62.76%, Test: 60.02%
+Run: 02, Epoch: 06, Train: 64.19%, Valid: 59.12%, Test: 56.88%
+Run: 02, Epoch: 07, Train: 65.15%, Valid: 64.49%, Test: 61.84%
+Run: 02, Epoch: 08, Train: 65.35%, Valid: 63.12%, Test: 60.20%
+Run: 02, Epoch: 09, Train: 64.87%, Valid: 62.44%, Test: 58.88%
+Run: 02, Epoch: 10, Train: 66.38%, Valid: 62.33%, Test: 60.12%
+Run: 02, Epoch: 11, Train: 66.11%, Valid: 63.09%, Test: 61.15%
+Run: 02, Epoch: 12, Train: 65.57%, Valid: 63.59%, Test: 60.86%
+Run: 02, Epoch: 13, Train: 66.84%, Valid: 63.20%, Test: 60.61%
+Run: 02, Epoch: 14, Train: 66.82%, Valid: 63.62%, Test: 60.64%
+Run: 02, Epoch: 15, Train: 67.76%, Valid: 62.90%, Test: 60.56%
+Run: 02, Epoch: 16, Train: 67.45%, Valid: 61.03%, Test: 59.50%
+Run: 02, Epoch: 17, Train: 68.00%, Valid: 62.10%, Test: 59.60%
+Run: 02, Epoch: 18, Train: 67.62%, Valid: 63.27%, Test: 60.80%
+Run: 02, Epoch: 19, Train: 67.84%, Valid: 64.58%, Test: 61.45%
+Run: 02, Epoch: 20, Train: 68.26%, Valid: 64.53%, Test: 61.47%
+Run: 02, Epoch: 21, Train: 66.99%, Valid: 63.76%, Test: 60.52%
+Run: 02, Epoch: 22, Train: 68.01%, Valid: 63.61%, Test: 60.35%
+Run: 02, Epoch: 23, Train: 69.06%, Valid: 63.42%, Test: 60.55%
+Run: 02, Epoch: 24, Train: 68.11%, Valid: 60.31%, Test: 58.32%
+Run: 02, Epoch: 25, Train: 68.31%, Valid: 63.23%, Test: 60.82%
+Run: 02, Epoch: 26, Train: 67.77%, Valid: 63.94%, Test: 60.82%
+Run: 02, Epoch: 27, Train: 69.02%, Valid: 62.77%, Test: 60.72%
+Run: 02, Epoch: 28, Train: 69.48%, Valid: 63.62%, Test: 60.69%
+Run: 02, Epoch: 29, Train: 70.00%, Valid: 63.27%, Test: 60.55%
+Run: 02, Epoch: 30, Train: 68.89%, Valid: 61.33%, Test: 59.18%
+Run 02:
+Highest Train: 70.00
+Highest Valid: 64.58
+  Final Train: 67.84
+   Final Test: 61.45
+Run: 03, Epoch: 01, Train: 59.36%, Valid: 57.11%, Test: 55.22%
+Run: 03, Epoch: 02, Train: 60.16%, Valid: 54.94%, Test: 52.98%
+Run: 03, Epoch: 03, Train: 62.74%, Valid: 59.17%, Test: 56.72%
+Run: 03, Epoch: 04, Train: 63.55%, Valid: 59.91%, Test: 57.94%
+Run: 03, Epoch: 05, Train: 63.65%, Valid: 60.82%, Test: 59.14%
+Run: 03, Epoch: 06, Train: 63.89%, Valid: 60.11%, Test: 58.77%
+Run: 03, Epoch: 07, Train: 63.98%, Valid: 58.75%, Test: 57.63%
+Run: 03, Epoch: 08, Train: 65.19%, Valid: 60.69%, Test: 58.87%
+Run: 03, Epoch: 09, Train: 66.07%, Valid: 62.32%, Test: 60.87%
+Run: 03, Epoch: 10, Train: 65.25%, Valid: 60.14%, Test: 58.83%
+Run: 03, Epoch: 11, Train: 66.09%, Valid: 60.86%, Test: 59.17%
+Run: 03, Epoch: 12, Train: 66.38%, Valid: 61.85%, Test: 59.95%
+Run: 03, Epoch: 13, Train: 66.23%, Valid: 59.85%, Test: 57.81%
+Run: 03, Epoch: 14, Train: 65.74%, Valid: 58.82%, Test: 57.75%
+Run: 03, Epoch: 15, Train: 67.57%, Valid: 63.13%, Test: 61.04%
+Run: 03, Epoch: 16, Train: 68.00%, Valid: 63.02%, Test: 60.12%
+Run: 03, Epoch: 17, Train: 67.16%, Valid: 62.53%, Test: 59.46%
+Run: 03, Epoch: 18, Train: 67.48%, Valid: 60.84%, Test: 59.37%
+Run: 03, Epoch: 19, Train: 67.15%, Valid: 63.28%, Test: 60.47%
+Run: 03, Epoch: 20, Train: 68.83%, Valid: 62.81%, Test: 60.61%
+Run: 03, Epoch: 21, Train: 67.39%, Valid: 60.23%, Test: 59.15%
+Run: 03, Epoch: 22, Train: 68.31%, Valid: 61.88%, Test: 59.56%
+Run: 03, Epoch: 23, Train: 68.62%, Valid: 64.70%, Test: 62.02%
+Run: 03, Epoch: 24, Train: 68.42%, Valid: 61.15%, Test: 59.36%
+Run: 03, Epoch: 25, Train: 68.74%, Valid: 63.22%, Test: 60.50%
+Run: 03, Epoch: 26, Train: 69.22%, Valid: 62.50%, Test: 60.19%
+Run: 03, Epoch: 27, Train: 68.18%, Valid: 63.25%, Test: 60.35%
+Run: 03, Epoch: 28, Train: 69.76%, Valid: 63.20%, Test: 60.83%
+Run: 03, Epoch: 29, Train: 69.81%, Valid: 63.75%, Test: 60.96%
+Run: 03, Epoch: 30, Train: 69.16%, Valid: 64.35%, Test: 61.12%
+Run 03:
+Highest Train: 69.81
+Highest Valid: 64.70
+  Final Train: 68.62
+   Final Test: 62.02
+Run: 04, Epoch: 01, Train: 60.44%, Valid: 58.92%, Test: 56.98%
+Run: 04, Epoch: 02, Train: 60.96%, Valid: 59.98%, Test: 58.11%
+Run: 04, Epoch: 03, Train: 62.72%, Valid: 59.44%, Test: 58.16%
+Run: 04, Epoch: 04, Train: 61.95%, Valid: 61.03%, Test: 58.61%
+Run: 04, Epoch: 05, Train: 63.36%, Valid: 62.42%, Test: 59.37%
+Run: 04, Epoch: 06, Train: 64.79%, Valid: 62.95%, Test: 60.53%
+Run: 04, Epoch: 07, Train: 64.35%, Valid: 63.00%, Test: 60.25%
+Run: 04, Epoch: 08, Train: 65.28%, Valid: 63.23%, Test: 60.07%
+Run: 04, Epoch: 09, Train: 65.56%, Valid: 60.85%, Test: 59.28%
+Run: 04, Epoch: 10, Train: 65.72%, Valid: 61.04%, Test: 59.34%
+Run: 04, Epoch: 11, Train: 65.96%, Valid: 61.40%, Test: 59.75%
+Run: 04, Epoch: 12, Train: 66.38%, Valid: 61.53%, Test: 59.08%
+Run: 04, Epoch: 13, Train: 66.50%, Valid: 63.92%, Test: 61.30%
+Run: 04, Epoch: 14, Train: 67.04%, Valid: 61.96%, Test: 59.78%
+Run: 04, Epoch: 15, Train: 67.27%, Valid: 63.88%, Test: 61.25%
+Run: 04, Epoch: 16, Train: 66.60%, Valid: 60.45%, Test: 58.89%
+Run: 04, Epoch: 17, Train: 67.38%, Valid: 61.08%, Test: 59.16%
+Run: 04, Epoch: 18, Train: 67.17%, Valid: 64.38%, Test: 60.63%
+Run: 04, Epoch: 19, Train: 67.62%, Valid: 64.02%, Test: 60.88%
+Run: 04, Epoch: 20, Train: 67.86%, Valid: 61.65%, Test: 59.46%
+Run: 04, Epoch: 21, Train: 68.20%, Valid: 61.55%, Test: 59.36%
+Run: 04, Epoch: 22, Train: 68.11%, Valid: 62.93%, Test: 60.50%
+Run: 04, Epoch: 23, Train: 68.20%, Valid: 60.91%, Test: 58.93%
+Run: 04, Epoch: 24, Train: 68.94%, Valid: 63.68%, Test: 60.65%
+Run: 04, Epoch: 25, Train: 68.19%, Valid: 62.21%, Test: 59.50%
+Run: 04, Epoch: 26, Train: 68.54%, Valid: 64.12%, Test: 61.51%
+Run: 04, Epoch: 27, Train: 68.39%, Valid: 63.63%, Test: 60.72%
+Run: 04, Epoch: 28, Train: 69.45%, Valid: 62.26%, Test: 59.96%
+Run: 04, Epoch: 29, Train: 68.29%, Valid: 64.44%, Test: 60.95%
+Run: 04, Epoch: 30, Train: 69.66%, Valid: 62.46%, Test: 59.51%
+Run 04:
+Highest Train: 69.66
+Highest Valid: 64.44
+  Final Train: 68.29
+   Final Test: 60.95
+Run: 05, Epoch: 01, Train: 60.43%, Valid: 57.65%, Test: 55.72%
+Run: 05, Epoch: 02, Train: 60.00%, Valid: 56.11%, Test: 54.26%
+Run: 05, Epoch: 03, Train: 63.00%, Valid: 59.42%, Test: 58.10%
+Run: 05, Epoch: 04, Train: 63.22%, Valid: 59.94%, Test: 58.54%
+Run: 05, Epoch: 05, Train: 63.93%, Valid: 63.38%, Test: 60.94%
+Run: 05, Epoch: 06, Train: 63.43%, Valid: 57.59%, Test: 56.54%
+Run: 05, Epoch: 07, Train: 63.80%, Valid: 63.79%, Test: 60.98%
+Run: 05, Epoch: 08, Train: 65.60%, Valid: 61.43%, Test: 59.97%
+Run: 05, Epoch: 09, Train: 65.30%, Valid: 60.18%, Test: 58.77%
+Run: 05, Epoch: 10, Train: 66.45%, Valid: 62.99%, Test: 60.05%
+Run: 05, Epoch: 11, Train: 65.68%, Valid: 60.39%, Test: 57.95%
+Run: 05, Epoch: 12, Train: 66.03%, Valid: 62.50%, Test: 59.81%
+Run: 05, Epoch: 13, Train: 67.18%, Valid: 62.92%, Test: 60.53%
+Run: 05, Epoch: 14, Train: 66.85%, Valid: 64.53%, Test: 61.29%
+Run: 05, Epoch: 15, Train: 67.51%, Valid: 61.78%, Test: 59.34%
+Run: 05, Epoch: 16, Train: 68.06%, Valid: 62.55%, Test: 59.97%
+Run: 05, Epoch: 17, Train: 66.53%, Valid: 60.23%, Test: 58.63%
+Run: 05, Epoch: 18, Train: 68.32%, Valid: 63.31%, Test: 60.83%
+Run: 05, Epoch: 19, Train: 68.19%, Valid: 64.52%, Test: 61.71%
+Run: 05, Epoch: 20, Train: 68.17%, Valid: 62.48%, Test: 60.07%
+Run: 05, Epoch: 21, Train: 67.60%, Valid: 64.57%, Test: 61.53%
+Run: 05, Epoch: 22, Train: 68.98%, Valid: 64.34%, Test: 61.66%
+Run: 05, Epoch: 23, Train: 68.64%, Valid: 63.30%, Test: 60.52%
+Run: 05, Epoch: 24, Train: 69.20%, Valid: 62.87%, Test: 60.41%
+Run: 05, Epoch: 25, Train: 68.82%, Valid: 62.39%, Test: 59.86%
+Run: 05, Epoch: 26, Train: 69.24%, Valid: 62.62%, Test: 59.69%
+Run: 05, Epoch: 27, Train: 69.39%, Valid: 63.15%, Test: 60.60%
+Run: 05, Epoch: 28, Train: 69.31%, Valid: 61.93%, Test: 59.41%
+Run: 05, Epoch: 29, Train: 69.62%, Valid: 63.01%, Test: 60.45%
+Run: 05, Epoch: 30, Train: 68.94%, Valid: 64.46%, Test: 60.76%
+Run 05:
+Highest Train: 69.62
+Highest Valid: 64.57
+  Final Train: 67.60
+   Final Test: 61.53
+Run: 06, Epoch: 01, Train: 59.21%, Valid: 56.40%, Test: 54.47%
+Run: 06, Epoch: 02, Train: 61.75%, Valid: 58.01%, Test: 56.47%
+Run: 06, Epoch: 03, Train: 63.30%, Valid: 60.27%, Test: 57.84%
+Run: 06, Epoch: 04, Train: 63.10%, Valid: 61.39%, Test: 59.50%
+Run: 06, Epoch: 05, Train: 63.22%, Valid: 58.93%, Test: 57.73%
+Run: 06, Epoch: 06, Train: 64.10%, Valid: 58.90%, Test: 58.05%
+Run: 06, Epoch: 07, Train: 64.34%, Valid: 62.62%, Test: 59.91%
+Run: 06, Epoch: 08, Train: 65.19%, Valid: 62.34%, Test: 59.52%
+Run: 06, Epoch: 09, Train: 66.20%, Valid: 62.61%, Test: 59.67%
+Run: 06, Epoch: 10, Train: 66.04%, Valid: 61.37%, Test: 58.94%
+Run: 06, Epoch: 11, Train: 66.14%, Valid: 60.88%, Test: 58.62%
+Run: 06, Epoch: 12, Train: 65.95%, Valid: 60.56%, Test: 58.49%
+Run: 06, Epoch: 13, Train: 67.16%, Valid: 63.73%, Test: 60.76%
+Run: 06, Epoch: 14, Train: 66.21%, Valid: 63.39%, Test: 60.72%
+Run: 06, Epoch: 15, Train: 67.63%, Valid: 62.64%, Test: 60.55%
+Run: 06, Epoch: 16, Train: 66.99%, Valid: 60.63%, Test: 58.15%
+Run: 06, Epoch: 17, Train: 68.47%, Valid: 63.66%, Test: 61.30%
+Run: 06, Epoch: 18, Train: 67.72%, Valid: 62.29%, Test: 60.18%
+Run: 06, Epoch: 19, Train: 68.00%, Valid: 62.57%, Test: 59.06%
+Run: 06, Epoch: 20, Train: 67.90%, Valid: 64.89%, Test: 61.84%
+Run: 06, Epoch: 21, Train: 68.15%, Valid: 61.05%, Test: 58.90%
+Run: 06, Epoch: 22, Train: 68.22%, Valid: 62.47%, Test: 60.49%
+Run: 06, Epoch: 23, Train: 68.14%, Valid: 61.86%, Test: 59.92%
+Run: 06, Epoch: 24, Train: 68.54%, Valid: 61.47%, Test: 59.67%
+Run: 06, Epoch: 25, Train: 68.72%, Valid: 63.35%, Test: 61.09%
+Run: 06, Epoch: 26, Train: 68.00%, Valid: 60.49%, Test: 58.58%
+Run: 06, Epoch: 27, Train: 69.52%, Valid: 63.60%, Test: 60.62%
+Run: 06, Epoch: 28, Train: 69.25%, Valid: 62.10%, Test: 60.42%
+Run: 06, Epoch: 29, Train: 69.32%, Valid: 61.51%, Test: 59.64%
+Run: 06, Epoch: 30, Train: 68.74%, Valid: 60.70%, Test: 59.08%
+Run 06:
+Highest Train: 69.52
+Highest Valid: 64.89
+  Final Train: 67.90
+   Final Test: 61.84
+Run: 07, Epoch: 01, Train: 60.28%, Valid: 57.61%, Test: 55.22%
+Run: 07, Epoch: 02, Train: 62.07%, Valid: 59.79%, Test: 58.02%
+Run: 07, Epoch: 03, Train: 63.32%, Valid: 60.00%, Test: 58.17%
+Run: 07, Epoch: 04, Train: 63.10%, Valid: 58.66%, Test: 57.36%
+Run: 07, Epoch: 05, Train: 63.58%, Valid: 61.88%, Test: 59.24%
+Run: 07, Epoch: 06, Train: 63.93%, Valid: 62.81%, Test: 60.02%
+Run: 07, Epoch: 07, Train: 65.24%, Valid: 61.41%, Test: 59.44%
+Run: 07, Epoch: 08, Train: 65.32%, Valid: 62.71%, Test: 60.85%
+Run: 07, Epoch: 09, Train: 65.43%, Valid: 61.72%, Test: 59.08%
+Run: 07, Epoch: 10, Train: 66.22%, Valid: 63.49%, Test: 60.55%
+Run: 07, Epoch: 11, Train: 65.25%, Valid: 63.52%, Test: 60.88%
+Run: 07, Epoch: 12, Train: 66.57%, Valid: 63.54%, Test: 60.81%
+Run: 07, Epoch: 13, Train: 66.27%, Valid: 61.69%, Test: 59.65%
+Run: 07, Epoch: 14, Train: 65.76%, Valid: 63.65%, Test: 61.13%
+Run: 07, Epoch: 15, Train: 67.35%, Valid: 61.52%, Test: 60.25%
+Run: 07, Epoch: 16, Train: 66.56%, Valid: 60.40%, Test: 58.35%
+Run: 07, Epoch: 17, Train: 67.96%, Valid: 62.06%, Test: 60.02%
+Run: 07, Epoch: 18, Train: 67.87%, Valid: 63.51%, Test: 60.36%
+Run: 07, Epoch: 19, Train: 68.16%, Valid: 62.98%, Test: 60.47%
+Run: 07, Epoch: 20, Train: 67.01%, Valid: 64.41%, Test: 61.21%
+Run: 07, Epoch: 21, Train: 67.90%, Valid: 61.43%, Test: 59.47%
+Run: 07, Epoch: 22, Train: 68.25%, Valid: 62.24%, Test: 59.76%
+Run: 07, Epoch: 23, Train: 68.27%, Valid: 64.15%, Test: 61.26%
+Run: 07, Epoch: 24, Train: 68.86%, Valid: 63.19%, Test: 60.09%
+Run: 07, Epoch: 25, Train: 68.73%, Valid: 62.11%, Test: 60.23%
+Run: 07, Epoch: 26, Train: 68.70%, Valid: 62.99%, Test: 60.30%
+Run: 07, Epoch: 27, Train: 69.07%, Valid: 64.67%, Test: 61.45%
+Run: 07, Epoch: 28, Train: 68.83%, Valid: 61.16%, Test: 59.15%
+Run: 07, Epoch: 29, Train: 69.51%, Valid: 63.15%, Test: 60.33%
+Run: 07, Epoch: 30, Train: 69.82%, Valid: 62.11%, Test: 59.94%
+Run 07:
+Highest Train: 69.82
+Highest Valid: 64.67
+  Final Train: 69.07
+   Final Test: 61.45
+Run: 08, Epoch: 01, Train: 58.81%, Valid: 55.04%, Test: 52.72%
+Run: 08, Epoch: 02, Train: 60.61%, Valid: 57.80%, Test: 56.19%
+Run: 08, Epoch: 03, Train: 63.01%, Valid: 59.95%, Test: 57.91%
+Run: 08, Epoch: 04, Train: 62.06%, Valid: 57.90%, Test: 55.54%
+Run: 08, Epoch: 05, Train: 63.55%, Valid: 62.36%, Test: 59.08%
+Run: 08, Epoch: 06, Train: 64.53%, Valid: 62.66%, Test: 60.26%
+Run: 08, Epoch: 07, Train: 64.46%, Valid: 60.76%, Test: 58.19%
+Run: 08, Epoch: 08, Train: 65.70%, Valid: 61.23%, Test: 59.44%
+Run: 08, Epoch: 09, Train: 63.90%, Valid: 58.70%, Test: 57.26%
+Run: 08, Epoch: 10, Train: 66.31%, Valid: 62.79%, Test: 60.66%
+Run: 08, Epoch: 11, Train: 66.53%, Valid: 63.96%, Test: 60.99%
+Run: 08, Epoch: 12, Train: 67.06%, Valid: 63.28%, Test: 60.56%
+Run: 08, Epoch: 13, Train: 66.55%, Valid: 60.68%, Test: 59.46%
+Run: 08, Epoch: 14, Train: 65.54%, Valid: 58.36%, Test: 57.31%
+Run: 08, Epoch: 15, Train: 67.31%, Valid: 63.08%, Test: 60.95%
+Run: 08, Epoch: 16, Train: 67.96%, Valid: 62.12%, Test: 59.53%
+Run: 08, Epoch: 17, Train: 67.79%, Valid: 61.67%, Test: 59.31%
+Run: 08, Epoch: 18, Train: 68.04%, Valid: 61.88%, Test: 60.23%
+Run: 08, Epoch: 19, Train: 67.94%, Valid: 62.00%, Test: 59.68%
+Run: 08, Epoch: 20, Train: 68.37%, Valid: 62.10%, Test: 59.79%
+Run: 08, Epoch: 21, Train: 67.70%, Valid: 60.55%, Test: 58.77%
+Run: 08, Epoch: 22, Train: 68.58%, Valid: 63.08%, Test: 60.26%
+Run: 08, Epoch: 23, Train: 68.01%, Valid: 60.88%, Test: 59.13%
+Run: 08, Epoch: 24, Train: 68.64%, Valid: 61.87%, Test: 59.39%
+Run: 08, Epoch: 25, Train: 68.71%, Valid: 62.14%, Test: 59.95%
+Run: 08, Epoch: 26, Train: 69.23%, Valid: 63.41%, Test: 60.87%
+Run: 08, Epoch: 27, Train: 69.11%, Valid: 62.34%, Test: 60.06%
+Run: 08, Epoch: 28, Train: 68.65%, Valid: 61.51%, Test: 59.76%
+Run: 08, Epoch: 29, Train: 68.73%, Valid: 62.59%, Test: 60.22%
+Run: 08, Epoch: 30, Train: 69.82%, Valid: 63.78%, Test: 61.11%
+Run 08:
+Highest Train: 69.82
+Highest Valid: 63.96
+  Final Train: 66.53
+   Final Test: 60.99
+Run: 09, Epoch: 01, Train: 59.77%, Valid: 57.35%, Test: 54.97%
+Run: 09, Epoch: 02, Train: 61.42%, Valid: 57.80%, Test: 56.33%
+Run: 09, Epoch: 03, Train: 62.35%, Valid: 56.46%, Test: 55.69%
+Run: 09, Epoch: 04, Train: 63.62%, Valid: 60.64%, Test: 58.87%
+Run: 09, Epoch: 05, Train: 63.24%, Valid: 62.41%, Test: 59.92%
+Run: 09, Epoch: 06, Train: 65.16%, Valid: 61.27%, Test: 59.47%
+Run: 09, Epoch: 07, Train: 64.68%, Valid: 62.43%, Test: 59.44%
+Run: 09, Epoch: 08, Train: 65.62%, Valid: 62.94%, Test: 60.90%
+Run: 09, Epoch: 09, Train: 66.01%, Valid: 61.85%, Test: 59.45%
+Run: 09, Epoch: 10, Train: 64.78%, Valid: 63.46%, Test: 60.76%
+Run: 09, Epoch: 11, Train: 65.44%, Valid: 59.91%, Test: 58.68%
+Run: 09, Epoch: 12, Train: 66.23%, Valid: 63.70%, Test: 60.90%
+Run: 09, Epoch: 13, Train: 67.30%, Valid: 63.77%, Test: 60.84%
+Run: 09, Epoch: 14, Train: 65.67%, Valid: 59.11%, Test: 57.57%
+Run: 09, Epoch: 15, Train: 66.97%, Valid: 63.49%, Test: 60.78%
+Run: 09, Epoch: 16, Train: 67.74%, Valid: 62.84%, Test: 60.23%
+Run: 09, Epoch: 17, Train: 67.53%, Valid: 60.55%, Test: 58.94%
+Run: 09, Epoch: 18, Train: 67.85%, Valid: 62.74%, Test: 60.37%
+Run: 09, Epoch: 19, Train: 68.35%, Valid: 63.49%, Test: 61.19%
+Run: 09, Epoch: 20, Train: 68.60%, Valid: 61.92%, Test: 59.29%
+Run: 09, Epoch: 21, Train: 66.89%, Valid: 63.94%, Test: 60.56%
+Run: 09, Epoch: 22, Train: 67.19%, Valid: 59.58%, Test: 58.27%
+Run: 09, Epoch: 23, Train: 69.22%, Valid: 63.35%, Test: 61.15%
+Run: 09, Epoch: 24, Train: 68.94%, Valid: 62.62%, Test: 60.27%
+Run: 09, Epoch: 25, Train: 69.13%, Valid: 62.75%, Test: 60.55%
+Run: 09, Epoch: 26, Train: 69.06%, Valid: 63.59%, Test: 60.86%
+Run: 09, Epoch: 27, Train: 68.81%, Valid: 61.23%, Test: 59.69%
+Run: 09, Epoch: 28, Train: 69.59%, Valid: 62.84%, Test: 60.56%
+Run: 09, Epoch: 29, Train: 69.02%, Valid: 64.29%, Test: 61.32%
+Run: 09, Epoch: 30, Train: 69.09%, Valid: 63.55%, Test: 60.88%
+Run 09:
+Highest Train: 69.59
+Highest Valid: 64.29
+  Final Train: 69.02
+   Final Test: 61.32
+Run: 10, Epoch: 01, Train: 58.79%, Valid: 56.55%, Test: 54.10%
+Run: 10, Epoch: 02, Train: 61.98%, Valid: 60.50%, Test: 57.68%
+Run: 10, Epoch: 03, Train: 61.89%, Valid: 58.30%, Test: 55.24%
+Run: 10, Epoch: 04, Train: 63.58%, Valid: 59.94%, Test: 58.25%
+Run: 10, Epoch: 05, Train: 64.61%, Valid: 61.23%, Test: 57.98%
+Run: 10, Epoch: 06, Train: 63.70%, Valid: 59.39%, Test: 57.77%
+Run: 10, Epoch: 07, Train: 64.51%, Valid: 59.77%, Test: 58.46%
+Run: 10, Epoch: 08, Train: 64.98%, Valid: 62.74%, Test: 60.23%
+Run: 10, Epoch: 09, Train: 65.26%, Valid: 61.64%, Test: 59.34%
+Run: 10, Epoch: 10, Train: 66.50%, Valid: 63.41%, Test: 61.16%
+Run: 10, Epoch: 11, Train: 66.01%, Valid: 62.99%, Test: 60.81%
+Run: 10, Epoch: 12, Train: 66.99%, Valid: 62.68%, Test: 60.01%
+Run: 10, Epoch: 13, Train: 67.01%, Valid: 62.52%, Test: 59.95%
+Run: 10, Epoch: 14, Train: 66.32%, Valid: 60.52%, Test: 58.46%
+Run: 10, Epoch: 15, Train: 67.18%, Valid: 62.52%, Test: 59.94%
+Run: 10, Epoch: 16, Train: 67.26%, Valid: 62.67%, Test: 60.55%
+Run: 10, Epoch: 17, Train: 67.62%, Valid: 63.51%, Test: 60.62%
+Run: 10, Epoch: 18, Train: 67.86%, Valid: 63.65%, Test: 60.77%
+Run: 10, Epoch: 19, Train: 67.52%, Valid: 61.62%, Test: 59.84%
+Run: 10, Epoch: 20, Train: 67.62%, Valid: 61.54%, Test: 59.93%
+Run: 10, Epoch: 21, Train: 68.65%, Valid: 62.71%, Test: 59.50%
+Run: 10, Epoch: 22, Train: 67.23%, Valid: 61.79%, Test: 59.63%
+Run: 10, Epoch: 23, Train: 68.22%, Valid: 61.18%, Test: 59.64%
+Run: 10, Epoch: 24, Train: 68.88%, Valid: 64.36%, Test: 61.67%
+Run: 10, Epoch: 25, Train: 68.72%, Valid: 61.31%, Test: 59.30%
+Run: 10, Epoch: 26, Train: 68.62%, Valid: 61.08%, Test: 59.64%
+Run: 10, Epoch: 27, Train: 69.66%, Valid: 63.74%, Test: 61.05%
+Run: 10, Epoch: 28, Train: 68.48%, Valid: 63.46%, Test: 60.58%
+Run: 10, Epoch: 29, Train: 69.92%, Valid: 63.97%, Test: 60.67%
+Run: 10, Epoch: 30, Train: 68.87%, Valid: 64.57%, Test: 60.82%
+Run 10:
+Highest Train: 69.92
+Highest Valid: 64.57
+  Final Train: 68.87
+   Final Test: 60.82
+All runs:
+Highest Train: 69.73 ± 0.17
+Highest Valid: 64.49 ± 0.27
+  Final Train: 68.29 ± 0.84
+   Final Test: 61.37 ± 0.38
