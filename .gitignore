@@ -2,3 +2,4 @@
 *.pdf
 dataset
 __pycache__
+logs

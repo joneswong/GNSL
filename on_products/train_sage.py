@@ -1,7 +1,5 @@
 import argparse
 
-import random
-import numpy as np
 import torch
 from tqdm.auto import tqdm
 import torch.nn.functional as F
@@ -14,15 +12,7 @@ from ogb.nodeproppred import PygNodePropPredDataset, Evaluator
 
 from logger import Logger
 
-from al import *
-
-
-def setup_seed(seed):
-    np.random.seed(seed)
-    random.seed(seed)
-    torch.manual_seed(seed)
-    torch.cuda.manual_seed(seed)
-    torch.backends.cudnn.deterministic = True
+from utils import *
 
 
 class SAGE(torch.nn.Module):
@@ -145,68 +135,64 @@ def main():
     parser.add_argument('--eval_steps', type=int, default=2)
     parser.add_argument('--runs', type=int, default=10)
     # exp relatead
+    parser.add_argument('--seed', type=int, default=123)
     parser.add_argument('--rsv', type=float, default=1.0)
-    parser.add_argument('--al', type=str, default='')
+    parser.add_argument('--al', type=str, default='random')
     parser.add_argument('--alpha', type=float, default=0.9)
     args = parser.parse_args()
     print(args)
 
-    setup_seed(123)
-
     device = f'cuda:{args.device}' if torch.cuda.is_available() else 'cpu'
     device = torch.device(device)
-
-    dataset = PygNodePropPredDataset(name='ogbn-products')
-    split_idx = dataset.get_idx_split()
-    data = dataset[0]
-
-    # Convert split indices to boolean masks and add them to `data`.
-    for key, idx in split_idx.items():
-        mask = torch.zeros(data.num_nodes, dtype=torch.bool)
-        if key in ['train', 'valid']:
-            if args.al == '' or key == 'valid':
-                idx = idx[torch.randperm(len(idx))]
-                new_len = int(args.rsv * len(idx))
-                idx = idx[:new_len]
-            else:
-                frac = args.rsv / args.alpha
-                if frac > 1.0:
-                    return
-                idx = idx[torch.randperm(len(idx))]
-                new_len = int(frac * len(idx))
-                idx = idx[:new_len]
-                if args.al in ['mem', 'el2n', 'infl-max', 'infl-sum-abs', 'ddd', 'uncertainty', 'representativeness', 'age']:
-                    idx = select_by_al(args.al, idx, args.alpha)
-                else:
-                    raise NotImplementedError(args.al)
-            print(idx, len(idx))
-        mask[idx] = True
-        data[f'{key}_mask'] = mask
-
-    # We omit normalization factors here since those are only defined for the
-    # inductive learning setup.
-    sampler_data = data
-    if args.inductive:
-        sampler_data = to_inductive(data)
-
-    loader = GraphSAINTRandomWalkSampler(sampler_data,
-                                         batch_size=args.batch_size,
-                                         walk_length=args.walk_length,
-                                         num_steps=args.num_steps,
-                                         sample_coverage=0,
-                                         save_dir=dataset.processed_dir)
-
-    model = SAGE(data.x.size(-1), args.hidden_channels, dataset.num_classes,
-                 args.num_layers, args.dropout).to(device)
-
-    subgraph_loader = NeighborSampler(data.edge_index, sizes=[-1],
-                                      batch_size=4096, shuffle=False,
-                                      num_workers=12)
 
     evaluator = Evaluator(name='ogbn-products')
     logger = Logger(args.runs, args)
 
+    ranks = load_rank_list(args.al)
+
     for run in range(args.runs):
+        dataset = PygNodePropPredDataset(name='ogbn-products')
+        split_idx = dataset.get_idx_split()
+        data = dataset[0]
+
+        setup_seed(args.seed + run)
+
+        # Convert split indices to boolean masks and add them to `data`.
+        for key, idx in split_idx.items():
+            mask = torch.zeros(data.num_nodes, dtype=torch.bool)
+            if key == 'test':
+                pass
+            elif key == 'valid':
+                idx = random_splits(data, dataset.num_classes, idx, args.rsv)
+            if key == 'train':
+                frac = args.rsv / args.alpha
+                if frac > 1.0:
+                    return
+                idx = random_splits(data, dataset.num_classes, idx, frac)
+                idx = select_by_al(data, dataset.num_classes, idx, args.alpha, ranks)
+            print(idx, len(idx), idx[0:3])
+            mask[idx] = True
+            data[f'{key}_mask'] = mask
+
+        # We omit normalization factors here since those are only defined for the
+        # inductive learning setup.
+        sampler_data = data
+        if args.inductive:
+            sampler_data = to_inductive(data)
+
+        loader = GraphSAINTRandomWalkSampler(sampler_data,
+                                             batch_size=args.batch_size,
+                                             walk_length=args.walk_length,
+                                             num_steps=args.num_steps,
+                                             sample_coverage=0,
+                                             save_dir=dataset.processed_dir)
+
+        model = SAGE(data.x.size(-1), args.hidden_channels, dataset.num_classes,
+                     args.num_layers, args.dropout).to(device)
+
+        subgraph_loader = NeighborSampler(data.edge_index, sizes=[-1],
+                                          batch_size=4096, shuffle=False,
+                                          num_workers=12)
         model.reset_parameters()
         optimizer = torch.optim.Adam(model.parameters(), lr=args.lr)
         for epoch in range(1, 1 + args.epochs):

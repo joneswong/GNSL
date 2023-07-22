@@ -1,4 +1,6 @@
+import os
 import argparse
+import copy
 from tqdm.auto import tqdm
 
 import random
@@ -10,8 +12,6 @@ from torch.utils.data import Dataset, DataLoader
 from ogb.nodeproppred import Evaluator
 
 from logger import Logger
-
-from al import *
 
 
 def setup_seed(seed):
@@ -113,18 +113,21 @@ def main():
     parser.add_argument('--lr', type=float, default=0.01)
     parser.add_argument('--batch_size', type=int, default=256)
     parser.add_argument('--epochs', type=int, default=30)
-    parser.add_argument('--runs', type=int, default=10)
+    parser.add_argument('--runs', type=int, default=1)
     # exp relatead
-    parser.add_argument('--rsv', type=float, default=1.0)
-    parser.add_argument('--al', type=str, default='')
-    parser.add_argument('--alpha', type=float, default=0.9)
+    parser.add_argument('--seed', type=int, default=0)
+    parser.add_argument('--rsv', type=float, default=0.7)
+    #parser.add_argument('--al', type=str, default='')
+    #parser.add_argument('--alpha', type=float, default=0.9)
+    parser.add_argument('--save_path', type=str, default='mem')
     args = parser.parse_args()
     print(args)
 
-    setup_seed(123)
+    setup_seed(args.seed)
 
     device = f'cuda:{args.device}' if torch.cuda.is_available() else 'cpu'
     device = torch.device(device)
+
 
 
     if not args.use_sgc_embedding:
@@ -156,25 +159,11 @@ def main():
 
 
     for key in ['train', 'valid']:
-        if args.al == '' or key == 'valid':
-            idx = split_idx[key]
-            idx = idx[torch.randperm(len(idx))]
-            new_len = int(args.rsv * len(idx))
-            idx = idx[:new_len]
-            split_idx[key] = idx
-        else:
-            frac = args.rsv / args.alpha
-            if frac > 1.0:
-                return
-            idx = split_idx[key]
-            idx = idx[torch.randperm(len(idx))]
-            new_len = int(frac * len(idx))
-            idx = idx[:new_len]
-            if args.al in ['mem', 'el2n']:
-                idx = select_by_al(args.al, idx, args.alpha)
-            else:
-                raise NotImplementedError(args.al)
-            split_idx[key] = idx
+        idx = split_idx[key]
+        idx = idx[torch.randperm(len(idx))]
+        new_len = int(args.rsv * len(idx))
+        idx = idx[:new_len]
+        split_idx[key] = idx
 
     train_dataset = SimpleDataset(x[split_idx['train']], y[split_idx['train']])
     valid_dataset = SimpleDataset(x[split_idx['valid']], y[split_idx['valid']])
@@ -192,6 +181,7 @@ def main():
     logger = Logger(args.runs, args)
 
     for run in range(args.runs):
+        best_valid = .0
         model.reset_parameters()
         optimizer = torch.optim.Adam(model.parameters(), lr=args.lr)
         for epoch in range(1, 1 + args.epochs):
@@ -201,7 +191,9 @@ def main():
             test_acc = test(model, device, test_loader, evaluator)
 
             logger.add_result(run, (train_acc, valid_acc, test_acc))
-
+            if valid_acc >= best_valid:
+                ckpt = copy.deepcopy(model.state_dict())
+                best_valid = valid_acc
             if epoch % args.log_steps == 0:
                 print(f'Run: {run + 1:02d}, '
                       f'Epoch: {epoch:02d}, '
@@ -210,6 +202,7 @@ def main():
                       f'Test: {100 * test_acc:.2f}%')
 
         logger.print_statistics(run)
+        torch.save({'model': ckpt, 'train_idx': split_idx['train'], 'valid_idx': split_idx['valid']}, os.path.join(args.save_path, str(args.seed)+".pt"))
     logger.print_statistics()
 
 

@@ -8,7 +8,7 @@ import seaborn as sns
 
 
 def load_random(fold, xs, ys, lgs):
-    rsvs = ['1.0', '0.9', '0.8', '0.7', '0.6', '0.5', '0.475', '0.45', '0.425', '0.4', '0.375', '0.35', '0.325', '0.3', '0.275', '0.25', '0.225', '0.2', '0.175', '0.15', '0.125', '0.1']
+    rsvs = ['1.0', '0.9', '0.8', '0.7', '0.6', '0.5', '0.475', '0.45', '0.425', '0.4', '0.375', '0.35', '0.325', '0.3', '0.275', '0.25', '0.225', '0.2', '0.175', '0.15']
 
     accs = []
     for para in rsvs:
@@ -25,18 +25,47 @@ def load_random(fold, xs, ys, lgs):
     lgs.append('random')
 
 
+def load_al(method, xs, ys, lgs):
+    results = []
+    fold = os.path.join("logs", method)
+    for fn in os.listdir(fold):
+        if fn.endswith(".out"):
+            params = re.findall("\d+\.\d+", fn)
+            if len(params) != 2:
+                raise ValueError(params)
+            rsv = float(params[0])
+            alpha = float(params[1])
+            if rsv != alpha:
+                continue
+            with open(os.path.join(fold, fn), 'r') as ips:
+                acc = None
+                for line in ips:
+                    mobj = re.findall("\d+\.\d+", line)
+                    if len(mobj) == 2:
+                        acc = float(mobj[0])
+            results.append((float(rsv), acc))
+    results = sorted(results, key=lambda tp:tp[0])
+    lgs.append(method)
+    xs.append(np.asarray([tp[0] for tp in results]))
+    ys.append(np.asarray([tp[1] for tp in results]))
+
+
 def main():
     parser = argparse.ArgumentParser(description='Plot Results')
     parser.add_argument('--fold', type=str, default='logs')
-    parser.add_argument('--al', type=str, default='random')
-    parser.add_argument('--min_rsv', type=float, default=0.0)
-    parser.add_argument('--min_alpha', type=float, default=0.0)
+    #parser.add_argument('--al', type=str, default='random')
+    #parser.add_argument('--min_rsv', type=float, default=0.0)
+    #parser.add_argument('--min_alpha', type=float, default=0.0)
     args = parser.parse_args()
     print(args)
 
     xs, ys, lgs = [], [], []
-    load_random(os.path.join(args.fold, args.al), xs, ys, lgs)
+    load_random(os.path.join(args.fold, 'random'), xs, ys, lgs)
     #load_al(args.al, xs, ys, lgs, args.min_rsv, args.min_alpha)
+    load_al('mem', xs, ys, lgs)
+    load_al('el2n', xs, ys, lgs)
+
+
 
     #1207179 125265
     V = 1332384
@@ -61,7 +90,7 @@ def main():
     #plt.ylim([2,50])
     plt.grid(True,which='both',alpha=0.2)
     sns.despine()
-    plt.savefig("obs_{}_on_papers100M.pdf".format(args.al), transparent='True')
+    plt.savefig("obs_on_papers100M.pdf", transparent='True')
 
 
 if __name__ == "__main__":

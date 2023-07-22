@@ -1,4 +1,6 @@
+import os
 import argparse
+import copy
 from tqdm.auto import tqdm
 
 import random
@@ -10,16 +12,6 @@ from torch.utils.data import Dataset, DataLoader
 from ogb.nodeproppred import Evaluator
 
 from logger import Logger
-
-from al import *
-
-
-def setup_seed(seed):
-    np.random.seed(seed)
-    random.seed(seed)
-    torch.manual_seed(seed)
-    torch.cuda.manual_seed(seed)
-    torch.backends.cudnn.deterministic = True
 
 
 class SimpleDataset(Dataset):
@@ -67,64 +59,43 @@ class MLP(torch.nn.Module):
         return torch.log_softmax(x, dim=-1)
 
 
-def train(model, device, train_loader, optimizer):
-    model.train()
-
-    total_loss = 0
-    for x, y in tqdm(train_loader):
-        x, y = x.to(device), y.to(device)
-        optimizer.zero_grad()
-        out = model(x)
-        loss = F.nll_loss(out, y.squeeze(1))
-        loss.backward()
-        optimizer.step()
-        total_loss += loss.item() * x.size(0)
-    return total_loss / len(train_loader.dataset)
-
-
 @torch.no_grad()
-def test(model, device, loader, evaluator):
+def infer(model, device, loader):
     model.eval()
 
     y_pred, y_true = [], []
-    for x, y in tqdm(loader):
+    for x, y in loader:
         x = x.to(device)
         out = model(x)
-
-        y_pred.append(torch.argmax(out, dim=1, keepdim=True).cpu())
+        y_pred.append(torch.exp(out).cpu())
         y_true.append(y)
 
-    return evaluator.eval({
-        "y_true": torch.cat(y_true, dim=0),
-        "y_pred": torch.cat(y_pred, dim=0),
-    })['acc']
+    y_pred = torch.cat(y_pred, 0)
+    y_true = torch.cat(y_true, 0)
+    return y_pred[torch.arange(y_pred.shape[0]), y_true.squeeze(1)]
 
 
 def main():
     parser = argparse.ArgumentParser(description='OGBN-papers100M (MLP)')
     parser.add_argument('--device', type=int, default=0)
-    parser.add_argument('--log_steps', type=int, default=1)
     parser.add_argument('--use_node_embedding', action='store_true')
     parser.add_argument('--use_sgc_embedding', action='store_true')
     parser.add_argument('--num_sgc_iterations', type=int, default = 3)
     parser.add_argument('--num_layers', type=int, default=3)
     parser.add_argument('--hidden_channels', type=int, default=256)
     parser.add_argument('--dropout', type=float, default=0)
-    parser.add_argument('--lr', type=float, default=0.01)
     parser.add_argument('--batch_size', type=int, default=256)
-    parser.add_argument('--epochs', type=int, default=30)
-    parser.add_argument('--runs', type=int, default=10)
     # exp relatead
-    parser.add_argument('--rsv', type=float, default=1.0)
-    parser.add_argument('--al', type=str, default='')
-    parser.add_argument('--alpha', type=float, default=0.9)
+    parser.add_argument('--mode', type=int, default=0)
+    parser.add_argument('--start_sample_id', type=int, default=0)
+    parser.add_argument('--end_sample_id', type=int, default=1000)
+    parser.add_argument('--fold', type=str, default='mem')
     args = parser.parse_args()
     print(args)
 
-    setup_seed(123)
-
     device = f'cuda:{args.device}' if torch.cuda.is_available() else 'cpu'
     device = torch.device(device)
+
 
 
     if not args.use_sgc_embedding:
@@ -155,62 +126,64 @@ def main():
             y = sgc_dict['label'].to(torch.long)
 
 
-    for key in ['train', 'valid']:
-        if args.al == '' or key == 'valid':
-            idx = split_idx[key]
-            idx = idx[torch.randperm(len(idx))]
-            new_len = int(args.rsv * len(idx))
-            idx = idx[:new_len]
-            split_idx[key] = idx
-        else:
-            frac = args.rsv / args.alpha
-            if frac > 1.0:
-                return
-            idx = split_idx[key]
-            idx = idx[torch.randperm(len(idx))]
-            new_len = int(frac * len(idx))
-            idx = idx[:new_len]
-            if args.al in ['mem', 'el2n']:
-                idx = select_by_al(args.al, idx, args.alpha)
-            else:
-                raise NotImplementedError(args.al)
-            split_idx[key] = idx
-
     train_dataset = SimpleDataset(x[split_idx['train']], y[split_idx['train']])
     valid_dataset = SimpleDataset(x[split_idx['valid']], y[split_idx['valid']])
     test_dataset = SimpleDataset(x[split_idx['test']], y[split_idx['test']])
 
     train_loader = DataLoader(train_dataset, batch_size=args.batch_size,
-                              shuffle=True)
+                              shuffle=False)
     valid_loader = DataLoader(valid_dataset, batch_size=128, shuffle=False)
     test_loader = DataLoader(test_dataset, batch_size=128, shuffle=False)
 
     model = MLP(x.size(-1), args.hidden_channels, 172, args.num_layers,
                 args.dropout).to(device)
 
-    evaluator = Evaluator(name='ogbn-papers100M')
-    logger = Logger(args.runs, args)
+    if args.mode == 0:
+        results = dict()
+        for t in tqdm(range(args.start_sample_id, args.end_sample_id)):
+            content = torch.load(os.path.join(args.fold, "{}.pt".format(t)), map_location=device)
+            model.load_state_dict(content['model'])
+            train_lbprob = infer(model, device, train_loader)
+            valid_lbprob= infer(model, device, valid_loader)
+            test_lbprob = infer(model, device, test_loader)
+            results[str(t)+"_train"] = train_lbprob
+            results[str(t)+"_valid"] = valid_lbprob
+            results[str(t)+"_test"] = test_lbprob
+        torch.save(results, os.path.join(args.fold, "{}-{}.pth".format(args.start_sample_id, args.end_sample_id)))
+    else:
+        split_idx['train'] = split_idx['train'].to(device)
+        train_masks = []
+        for t in tqdm(range(args.start_sample_id, args.end_sample_id)):
+            content = torch.load(os.path.join(args.fold, "{}.pt".format(t)), map_location=device)
+            mask = torch.zeros_like(split_idx['train'], dtype=torch.bool).scatter_(0, content['train_idx'], True)
+            train_masks.append(mask)
 
-    for run in range(args.runs):
-        model.reset_parameters()
-        optimizer = torch.optim.Adam(model.parameters(), lr=args.lr)
-        for epoch in range(1, 1 + args.epochs):
-            train(model, device, train_loader, optimizer)
-            train_acc = test(model, device, train_loader, evaluator)
-            valid_acc = test(model, device, valid_loader, evaluator)
-            test_acc = test(model, device, test_loader, evaluator)
+        lbprobs = dict()
+        for fn in os.listdir(args.fold):
+            if fn.endswith(".pth"):
+                content = torch.load(os.path.join(args.fold, fn), map_location=device)
+                lbprobs.update(content)
 
-            logger.add_result(run, (train_acc, valid_acc, test_acc))
+        train_cnts = torch.zeros_like(split_idx['train']).long()
+        train_mems = torch.zeros_like(split_idx['train'], dtype=torch.float32)
+        for i in tqdm(range(args.end_sample_id - args.start_sample_id)):
+            for j in range(args.end_sample_id - args.start_sample_id):
+                if i == j:
+                    continue
+                gap = lbprobs[str(i)+"_train"] - lbprobs[str(j)+"_train"]
+                flag = torch.logical_and(train_masks[i], torch.logical_not(train_masks[j]))
+                train_cnts += flag
+                train_mems += flag.float() * gap
 
-            if epoch % args.log_steps == 0:
-                print(f'Run: {run + 1:02d}, '
-                      f'Epoch: {epoch:02d}, '
-                      f'Train: {100 * train_acc:.2f}%, '
-                      f'Valid: {100 * valid_acc:.2f}%, '
-                      f'Test: {100 * test_acc:.2f}%')
+        train_mems = (train_mems / (train_cnts + 1e-8)).cpu()
+        indices = split_idx['train'].cpu().numpy()
+        results = [(int(indices[i]), float(train_mems[i])) for i in range(len(train_mems))]
+        results = sorted(results, key=lambda x:x[1], reverse=True)
+        with open(os.path.join(args.fold, "train.tsv"), 'w') as ops:
+            for i in range(len(results)):
+                idx, mem = results[i]
+                ops.write("{}\t{}\n".format(idx, mem))
 
-        logger.print_statistics(run)
-    logger.print_statistics()
 
 
 if __name__ == "__main__":
