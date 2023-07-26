@@ -1,8 +1,6 @@
 import argparse
 from tqdm.auto import tqdm
 
-import random
-import numpy as np
 import torch
 import torch.nn.functional as F
 from torch.utils.data import Dataset, DataLoader
@@ -11,15 +9,7 @@ from ogb.nodeproppred import Evaluator
 
 from logger import Logger
 
-from al import *
-
-
-def setup_seed(seed):
-    np.random.seed(seed)
-    random.seed(seed)
-    torch.manual_seed(seed)
-    torch.cuda.manual_seed(seed)
-    torch.backends.cudnn.deterministic = True
+from utils import *
 
 
 class SimpleDataset(Dataset):
@@ -115,13 +105,14 @@ def main():
     parser.add_argument('--epochs', type=int, default=30)
     parser.add_argument('--runs', type=int, default=10)
     # exp relatead
+    parser.add_argument('--seed', type=int, default=123)
     parser.add_argument('--rsv', type=float, default=1.0)
-    parser.add_argument('--al', type=str, default='')
     parser.add_argument('--alpha', type=float, default=0.9)
+    parser.add_argument('--al', type=str, default='random')
     args = parser.parse_args()
     print(args)
 
-    setup_seed(123)
+    setup_seed(args.seed)
 
     device = f'cuda:{args.device}' if torch.cuda.is_available() else 'cpu'
     device = torch.device(device)
@@ -146,7 +137,7 @@ def main():
             raise ValueError('No option to use node embedding and sgc embedding at the same time.')
         else:
             try:
-                sgc_dict = torch.load('sgc_dict.pt')
+                sgc_dict = torch.load('/mnt/ogb_datasets/ogbn_papers100M/sgc_dict.pt')
             except:
                 raise RuntimeError('sgc_dict.pt not found. Need to run python sgc.py first')
 
@@ -155,26 +146,22 @@ def main():
             y = sgc_dict['label'].to(torch.long)
 
 
-    for key in ['train', 'valid']:
-        if args.al == '' or key == 'valid':
-            idx = split_idx[key]
-            idx = idx[torch.randperm(len(idx))]
-            new_len = int(args.rsv * len(idx))
-            idx = idx[:new_len]
-            split_idx[key] = idx
-        else:
+    ranks = load_rank_list(args.al)
+    for key, idx in split_idx.items():
+        if key == 'test':
+            pass
+        elif key == 'valid':
+            # 111059956 nodes, and just ~1M are considered
+            idx = random_splits(y.shape[0], 172, y, idx, args.rsv)
+        if key == 'train':
             frac = args.rsv / args.alpha
             if frac > 1.0:
                 return
-            idx = split_idx[key]
-            idx = idx[torch.randperm(len(idx))]
-            new_len = int(frac * len(idx))
-            idx = idx[:new_len]
-            if args.al in ['mem', 'el2n']:
-                idx = select_by_al(args.al, idx, args.alpha)
-            else:
-                raise NotImplementedError(args.al)
-            split_idx[key] = idx
+            idx = random_splits(y.shape[0], 172, y, idx, frac)
+            idx = select_by_al(y.shape[0], 172, y, idx, args.alpha, ranks)
+        print(idx, len(idx), idx[0:3])
+        split_idx[key] = idx
+
 
     train_dataset = SimpleDataset(x[split_idx['train']], y[split_idx['train']])
     valid_dataset = SimpleDataset(x[split_idx['valid']], y[split_idx['valid']])
