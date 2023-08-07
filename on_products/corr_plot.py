@@ -22,7 +22,8 @@ def main():
     print(args)
 
     als = []
-    for al in ['random', 'mem', 'infl-max', 'infl-sum-abs', 'el2n', 'ddd', 'uncertainty', 'centrality', 'age', 'homo-level']:
+    #for al in ['random', 'mem', 'infl-max', 'infl-sum-abs', 'el2n', 'ddd', 'uncertainty', 'centrality', 'age', 'homo-level']:
+    for al in ['uncertainty', 'centrality', 'density', 'age', 'infl-max', 'dist-greedy', 'dist-greedy-new']:
         vals = load_al_rank(al)
         if al == 'ddd':
             vals = np.max(vals) - vals

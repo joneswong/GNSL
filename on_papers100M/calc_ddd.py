@@ -3,13 +3,13 @@ import argparse
 import copy
 from tqdm.auto import tqdm
 
+import random
+import numpy as np
 import torch
 import torch.nn.functional as F
 from torch.utils.data import Dataset, DataLoader
 
 from ogb.nodeproppred import Evaluator
-
-from utils import *
 
 
 class SimpleDataset(Dataset):
@@ -57,63 +57,41 @@ class MLP(torch.nn.Module):
         return torch.log_softmax(x, dim=-1)
 
 
-def train(model, device, train_loader, optimizer):
-    model.train()
-
-    total_loss = 0
-    for x, y in tqdm(train_loader):
-        x, y = x.to(device), y.to(device)
-        optimizer.zero_grad()
-        out = model(x)
-        loss = F.nll_loss(out, y.squeeze(1))
-        loss.backward()
-        optimizer.step()
-        total_loss += loss.item() * x.size(0)
-    return total_loss / len(train_loader.dataset)
-
-
 @torch.no_grad()
-def test(model, device, loader, evaluator):
+def infer(model, device, loader):
     model.eval()
 
     y_pred, y_true = [], []
-    for x, y in tqdm(loader):
+    for x, y in loader:
         x = x.to(device)
         out = model(x)
-
-        y_pred.append(torch.argmax(out, dim=1, keepdim=True).cpu())
+        y_pred.append(out.argmax(dim=-1, keepdim=True).cpu())
         y_true.append(y)
 
-    return evaluator.eval({
-        "y_true": torch.cat(y_true, dim=0),
-        "y_pred": torch.cat(y_pred, dim=0),
-    })['acc']
+    y_pred = torch.cat(y_pred, 0)
+    y_true = torch.cat(y_true, 0)
+    return (y_pred == y_true).squeeze(1)
+
 
 
 def main():
     parser = argparse.ArgumentParser(description='OGBN-papers100M (MLP)')
     parser.add_argument('--device', type=int, default=0)
-    parser.add_argument('--log_steps', type=int, default=1)
     parser.add_argument('--use_node_embedding', action='store_true')
     parser.add_argument('--use_sgc_embedding', action='store_true')
     parser.add_argument('--num_sgc_iterations', type=int, default = 3)
     parser.add_argument('--num_layers', type=int, default=3)
     parser.add_argument('--hidden_channels', type=int, default=256)
     parser.add_argument('--dropout', type=float, default=0)
-    parser.add_argument('--lr', type=float, default=0.01)
     parser.add_argument('--batch_size', type=int, default=256)
-    parser.add_argument('--epochs', type=int, default=30)
     # exp relatead
-    parser.add_argument('--seed', type=int, default=0)
-    parser.add_argument('--rsv', type=float, default=0.7)
-    parser.add_argument('--save_path', type=str, default='')
+    parser.add_argument('--fold', type=str, default='/mnt/ogb_datasets/ogbn_papers100M/ckpts')
     args = parser.parse_args()
     print(args)
 
-    setup_seed(args.seed)
-
     device = f'cuda:{args.device}' if torch.cuda.is_available() else 'cpu'
     device = torch.device(device)
+
 
 
     if not args.use_sgc_embedding:
@@ -144,46 +122,31 @@ def main():
             y = sgc_dict['label'].to(torch.long)
 
 
-    for key in ['train', 'valid']:
-        idx = split_idx[key]
-        idx = idx[torch.randperm(len(idx))]
-        new_len = int(args.rsv * len(idx))
-        idx = idx[:new_len]
-        split_idx[key] = idx
-
     train_dataset = SimpleDataset(x[split_idx['train']], y[split_idx['train']])
     valid_dataset = SimpleDataset(x[split_idx['valid']], y[split_idx['valid']])
     test_dataset = SimpleDataset(x[split_idx['test']], y[split_idx['test']])
 
     train_loader = DataLoader(train_dataset, batch_size=args.batch_size,
-                              shuffle=True)
-    valid_loader = DataLoader(valid_dataset, batch_size=128, shuffle=False)
-    test_loader = DataLoader(test_dataset, batch_size=128, shuffle=False)
+                              shuffle=False)
 
     model = MLP(x.size(-1), args.hidden_channels, 172, args.num_layers,
                 args.dropout).to(device)
 
-    evaluator = Evaluator(name='ogbn-papers100M')
+    correctness = torch.zeros_like(split_idx['train'], dtype=torch.int32)
+    for fn in os.listdir(args.fold):
+        if fn.endswith(".pt"):
+            content = torch.load(os.path.join(args.fold, fn), map_location=device)
+            model.load_state_dict(content['model'])
+            train_cor = infer(model, device, train_loader)
+            correctness += train_cor
 
-    best_valid = .0
-    model.reset_parameters()
-    optimizer = torch.optim.Adam(model.parameters(), lr=args.lr)
-    for epoch in range(1, 1 + args.epochs):
-        train(model, device, train_loader, optimizer)
-        train_acc = test(model, device, train_loader, evaluator)
-        valid_acc = test(model, device, valid_loader, evaluator)
-        test_acc = test(model, device, test_loader, evaluator)
-
-        if valid_acc >= best_valid:
-            ckpt = copy.deepcopy(model.state_dict())
-            best_valid = valid_acc
-        if epoch % args.log_steps == 0:
-            print(f'Epoch: {epoch:02d}, '
-                  f'Train: {100 * train_acc:.2f}%, '
-                  f'Valid: {100 * valid_acc:.2f}%, '
-                  f'Test: {100 * test_acc:.2f}%')
-
-    torch.save({'model': ckpt, 'train_idx': split_idx['train'], 'valid_idx': split_idx['valid']}, os.path.join(args.save_path, str(args.seed)+".pt"))
+    correctness = correctness.numpy().tolist()
+    results = [(int(i), float(correctness[i])) for i in range(len(correctness))]
+    results = sorted(results, key=lambda x:x[1])
+    with open(os.path.join("ddd", "train.tsv"), 'w') as ops:
+        for i in range(len(results)):
+            idx, norm = results[i]
+            ops.write("{}\t{}\n".format(idx, norm))
 
 
 if __name__ == "__main__":

@@ -133,6 +133,9 @@ def main():
         elif args.algo == 'greedy':
             split_idx = dataset.get_idx_split()
             train_idx = split_idx['train'].to(device)
+            #print(train_idx)
+            #print(train_idx[:30])
+            #assert (train_idx >= torch.Tensor([len(train_idx)]).long().to(device)).sum().cpu().item() == 0, "Indices are not consecutive!!!"
             test_idx = split_idx['test'].to(device)
             train_zs = zs[train_idx]
             test_zs = zs[test_idx]
@@ -163,7 +166,10 @@ def main():
                     pick_idx = tr_flag.nonzero().squeeze(1)[min_dist_idx]
                     picked_dist = calc_dist(train_zs[pick_idx], test_zs)
                     useful_idx = (picked_dist < cur_dist).sum(axis=1).nonzero().squeeze(1)
-                    pick_tr_idx = list(set(train_idx[pick_idx[useful_idx]].cpu().tolist()))
+                    pick_idx = pick_idx[useful_idx]
+                    pick_tr_idx = list(set(pick_idx.cpu().tolist()))
+                    rank.extend(pick_tr_idx)
+                    tr_flag[pick_idx] = False
                     if len(pick_tr_idx) > 0:
                         cur_dist = torch.minimum(cur_dist, picked_dist.min(0)[0])
                 else:
@@ -184,10 +190,11 @@ def main():
                 else:
                     no_inc += 1
                     if no_inc >= args.patience:
-                        if len(rank) >= 0.9 * len(train_idx):
+                        if len(rank) >= 0.85 * len(train_idx):
                             print("Greedily picked {} training nodes".format(len(rank)))
                             rank_as_set = set(rank)
-                            other_nodes = np.random.shuffle([vid for vid in train_idx.cpu().tolist() if vid not in rank_as_set])
+                            other_nodes = [vid for vid in train_idx.cpu().tolist() if vid not in rank_as_set]
+                            np.random.shuffle(other_nodes)
                             rank.extend(other_nodes)
                             break
                         else:
@@ -204,7 +211,7 @@ def main():
             #cnt_min_dist = cnt_min_dist.cpu().tolist()
             #results = [(i, vi) for i, vi in zip(train_idx, cnt_min_dist)]
             #results = sorted(results, key=lambda x:x[1], reverse=True)
-            with open(os.path.join("dist-greedy", "train.tsv"), 'w') as ops:
+            with open(os.path.join("ours", "train.tsv"), 'w') as ops:
                 for i in range(len(rank)):
                     ops.write("{}\t{}\n".format(rank[i], i))
         else:

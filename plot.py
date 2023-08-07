@@ -61,14 +61,14 @@ def main():
     xs, ys, lgs = [], [], []
     for dirname in args.folds.split(','):
         #for lg in ['Random', 'EL2N', 'Mem', 'Infl-max', 'DDD', 'AGE']:#'Infl-sum-abs', 'DDD', 'AGE']:
-        #for lg in ['Random', 'Mem', 'Mem+Dist', 'AGE', 'AGE+Dist', 'Dist-greedy']:
-        for lg in ['Random']:
+        #for lg in ['Random', 'EL2N', 'Mem', 'Infl-max', 'AGE', 'Dist-Greedy']:
+        for lg in ['Random', 'Infl-max', 'Ours']:
             fn = lg.lower()
             #if fn == 'random':
             #    tp = load_random(os.path.join(args.fold, fn))
             #else:
             #    tp = load_al(os.path.join(args.fold, fn))
-            tp = load_al(os.path.join(dirname, fn))
+            tp = load_al(os.path.join("on_{}".format(args.dataset), os.path.join(dirname, fn)))
             if lg in lgs:
                 idx = lgs.index(lg)
                 assert len(ys[idx]) == len(tp[1]), "inconsistent len {}".format(len(tp[1]))
@@ -79,9 +79,18 @@ def main():
                 ys.append(tp[1])
 
     num_folds = len(args.folds.split(','))
+    min_error_rate = 100
+    method_id = -1
+    ratio = -1
     for i in range(len(xs)):
         xs[i] = V * xs[i]
         ys[i] = 100.0 - (ys[i] / num_folds)
+        idx = np.argmin(ys[i])
+        if ys[i][idx] < min_error_rate and i != 0:
+            min_error_rate = ys[i][idx]
+            method_id = i
+            ratio = xs[i][idx]
+    print(lgs[method_id], ratio, min_error_rate)
 
     # plt.axvline(np.sqrt(N)/2)
     with sns.color_palette('viridis_r', len(xs)):
@@ -94,7 +103,8 @@ def main():
     plt.ylabel('Error')
     #plt.xlabel(r'$\alpha$')
     plt.xlabel('Training examples')
-    #plt.ylim(0.0, 23.5)
+    if args.dataset == 'products':
+        plt.ylim(0.0, 23.5)
     plt.legend();
     #plt.xticks([1,2,3],[1,2,3])
     #plt.yticks([2,10,20,50],[2,10,20,50])

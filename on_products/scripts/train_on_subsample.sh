@@ -14,4 +14,5 @@ do
   #CUDA_VISIBLE_DEVICES="${CUDAID}" python train_on_subsample.py --seed $i --epochs 5 --hidden_channels 128 --begin_valid_at 5 --eval_steps 1 --save_path ddd >temp/${i}.out 2>temp/${i}.err
   # FOR AGE
   #CUDA_VISIBLE_DEVICES="${CUDAID}" python train_on_subsample.py --seed $i --epochs 5 --hidden_channels 128 --begin_valid_at 5 --eval_steps 1 --save_path ddd >temp/${i}.out 2>temp/${i}.err
+  CUDA_VISIBLE_DEVICES="${CUDAID}" python train_on_subsample.py --seed $i --epochs 5 --begin_valid_at 5 --eval_steps 1 --save_path age >temp/${i}.out 2>temp/${i}.err
 done

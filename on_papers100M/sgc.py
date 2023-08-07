@@ -8,6 +8,8 @@ from torch_geometric.utils import to_undirected
 
 from ogb.nodeproppred import PygNodePropPredDataset
 
+from utils import *
+
 
 def dropout_edge(edge_index, p=0.5):
     row, col = edge_index
@@ -25,9 +27,11 @@ def main():
     parser.add_argument('--dropedge_rate', type=float, default=0.4)
     args = parser.parse_args()
 
+    setup_seed(42)
+
     # SGC pre-processing ######################################################
 
-    dataset = PygNodePropPredDataset('ogbn-papers100M')
+    dataset = PygNodePropPredDataset('ogbn-papers100M', root="/mnt/ogb_datasets")
     split_idx = dataset.get_idx_split()
     data = dataset[0]
 
@@ -40,6 +44,7 @@ def main():
     data.edge_index = to_undirected(data.edge_index, num_nodes=data.num_nodes)
 
     print(data)
+    torch.save(data.edge_index, '/mnt/ogb_datasets/ogbn_papers100M/edge_index.pt')
 
     row, col = data.edge_index
 
@@ -75,10 +80,9 @@ def main():
         x = adj @ x
         sgc_dict['sgc_embedding'].append(torch.from_numpy(x[all_idx]).to(torch.float))
 
-
     print(sgc_dict)
 
-    torch.save(sgc_dict, 'sgc_dict.pt')
+    torch.save(sgc_dict, '/mnt/ogb_datasets/ogbn_papers100M/sgc_dict.pt')
 
 
 if __name__ == "__main__":

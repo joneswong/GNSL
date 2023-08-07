@@ -96,8 +96,10 @@ def main():
     # exp relatead
     parser.add_argument('--mode', type=int, default=0)
     parser.add_argument('--metric', type=str, default='uncertainty')
-    parser.add_argument('--alpha', type=float, default=0.5)
+    parser.add_argument('--alpha', type=float, default=0.3333)
+    parser.add_argument('--beta', type=float, default=0.3333)
     parser.add_argument('--fold', type=str, default='age')
+    parser.add_argument('--output_fold', type=str, default='')
     args = parser.parse_args()
     print(args)
 
@@ -134,8 +136,21 @@ def main():
             torch.save(results, os.path.join(args.fold, 'uncertainty.pt'))
         elif args.metric == 'centrality':
             pass
+        elif args.metric == 'density':
+            content = torch.load(os.path.join(args.fold, "4.pt"), map_location=device)
+            model.load_state_dict(content['model'])
+            prob = infer(model, data, subgraph_loader, device).numpy()
+            # k-means
+            from sklearn.cluster import KMeans
+            from sklearn.metrics.pairwise import euclidean_distances
+            NCL = dataset.num_classes // 2
+            kmeans = KMeans(n_clusters=NCL, random_state=42).fit(prob)
+            ed = euclidean_distances(prob, kmeans.cluster_centers_)
+            ed_score = np.min(ed, axis=1)#the larger ed_score is, the far that node is away from cluster centers, the less representativeness the node is
+            #edprec = np.asarray([percd(ed_score, i) for i in range(len(ed_score))])
+            torch.save(torch.from_numpy(ed_score), os.path.join(args.fold, 'density.pt'))
         else:
-            raise NotImplementedError("No this metric now")
+            raise ValueError("No this metric now")
     else:
         pr = torch.load(os.path.join(args.fold, "pr.pt"))
         pr = np.asarray([len(pr) * pr[i] for i in range(len(pr))])
@@ -147,21 +162,30 @@ def main():
         for k, v in uncertainty.items():
             u += v
         u = u / len(uncertainty)
+        d = torch.load(os.path.join(args.fold, "density.pt"))
+        print(d.shape)
 
         if args.metric == 'centrality':
             metric = pr
         elif args.metric == 'uncertainty':
             metric = u
+        elif args.metric == 'density':
+            metric = d
         elif args.metric == 'age':
             pr = val2pct(pr)
             u = val2pct(u)
-            metric = args.alpha * u + (1-args.alpha) * pr
+            d = val2pct(d)
+            metric = args.alpha * u + args.beta * pr + (1.0 - args.beta - args.alpha) * d
         else:
             raise NotImplementedError("No this metric now")
 
         results = [(i, float(metric[i].item())) for i in range(len(data['train_mask'])) if data['train_mask'][i] == True]
         results = sorted(results, key=lambda x:x[1], reverse=True)
-        with open(os.path.join(args.fold, "train_by_{}.tsv".format(args.metric)), 'w') as ops:
+        if args.output_fold:
+            output_fold = args.output_fold
+        else:
+            output_fold = args.metric
+        with open(os.path.join(output_fold, "train.tsv"), 'w') as ops:
             for i in range(len(results)):
                 idx, norm = results[i]
                 ops.write("{}\t{}\n".format(idx, norm))

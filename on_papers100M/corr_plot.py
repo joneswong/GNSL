@@ -17,13 +17,14 @@ def load_al_rank(name):
 
 def main():
     parser = argparse.ArgumentParser(description='Plot Results')
-    parser.add_argument('--fold', type=str, default='logs')
     args = parser.parse_args()
     print(args)
 
     als = []
-    for al in ['mem', 'el2n']:
+    for al in ['random', 'ours', 'ours1']:
         vals = load_al_rank(al)
+        if al == 'ddd':
+            vals = np.max(vals) - vals
         als.append(vals)
 
     corr_matrix = []

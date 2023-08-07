@@ -67,12 +67,12 @@ def infer(model, device, loader):
     for x, y in loader:
         x = x.to(device)
         out = model(x)
-        y_pred.append(torch.exp(out).cpu())
+        y_pred.append(out.argmax(dim=-1, keepdim=True).cpu())
         y_true.append(y)
 
     y_pred = torch.cat(y_pred, 0)
     y_true = torch.cat(y_true, 0)
-    return y_pred[torch.arange(y_pred.shape[0]), y_true.squeeze(1)]
+    return (y_pred == y_true).squeeze(1)
 
 
 def main():
@@ -88,14 +88,14 @@ def main():
     # exp relatead
     parser.add_argument('--mode', type=int, default=0)
     parser.add_argument('--start_sample_id', type=int, default=0)
-    parser.add_argument('--end_sample_id', type=int, default=1000)
-    parser.add_argument('--fold', type=str, default='mem')
+    parser.add_argument('--end_sample_id', type=int, default=800)
+    parser.add_argument('--fold', type=str, default='/mnt/ogb_datasets/ogbn_papers100M/ckpts')
+    parser.add_argument('--infl', type=str, default='')
     args = parser.parse_args()
     print(args)
 
     device = f'cuda:{args.device}' if torch.cuda.is_available() else 'cpu'
     device = torch.device(device)
-
 
 
     if not args.use_sgc_embedding:
@@ -117,7 +117,7 @@ def main():
             raise ValueError('No option to use node embedding and sgc embedding at the same time.')
         else:
             try:
-                sgc_dict = torch.load('sgc_dict.pt')
+                sgc_dict = torch.load('/mnt/ogb_datasets/ogbn_papers100M/sgc_dict.pt')
             except:
                 raise RuntimeError('sgc_dict.pt not found. Need to run python sgc.py first')
 
@@ -143,47 +143,90 @@ def main():
         for t in tqdm(range(args.start_sample_id, args.end_sample_id)):
             content = torch.load(os.path.join(args.fold, "{}.pt".format(t)), map_location=device)
             model.load_state_dict(content['model'])
-            train_lbprob = infer(model, device, train_loader)
-            valid_lbprob= infer(model, device, valid_loader)
-            test_lbprob = infer(model, device, test_loader)
-            results[str(t)+"_train"] = train_lbprob
-            results[str(t)+"_valid"] = valid_lbprob
-            results[str(t)+"_test"] = test_lbprob
+            train_cor = infer(model, device, train_loader)
+            valid_cor= infer(model, device, valid_loader)
+            test_cor = infer(model, device, test_loader)
+            results[str(t)+"_train"] = train_cor
+            results[str(t)+"_valid"] = valid_cor
+            results[str(t)+"_test"] = test_cor
         torch.save(results, os.path.join(args.fold, "{}-{}.pth".format(args.start_sample_id, args.end_sample_id)))
     else:
-        split_idx['train'] = split_idx['train'].to(device)
         train_masks = []
         for t in tqdm(range(args.start_sample_id, args.end_sample_id)):
-            content = torch.load(os.path.join(args.fold, "{}.pt".format(t)), map_location=device)
+            content = torch.load(os.path.join(args.fold, "{}.pt".format(t)))
             mask = torch.zeros_like(split_idx['train'], dtype=torch.bool).scatter_(0, content['train_idx'], True)
             train_masks.append(mask)
+        trainset_mask = np.vstack(train_masks)
+        inv_mask = np.logical_not(trainset_mask)
 
-        lbprobs = dict()
+        cors = dict()
         for fn in os.listdir(args.fold):
             if fn.endswith(".pth"):
-                content = torch.load(os.path.join(args.fold, fn), map_location=device)
-                lbprobs.update(content)
+                content = torch.load(os.path.join(args.fold, fn))
+                cors.update(content)
+        correctness = (len(cors) // 3) * [None]
+        test_correctness = (len(cors) // 3) * [None]
+        for k, v in cors.items():
+            if k.endswith('train'):
+                correctness[int(k[:k.find('_')])] = v.numpy()
+            elif k.endswith('test'):
+                test_correctness[int(k[:k.find('_')])] = v.numpy()
 
-        train_cnts = torch.zeros_like(split_idx['train']).long()
-        train_mems = torch.zeros_like(split_idx['train'], dtype=torch.float32)
-        for i in tqdm(range(args.end_sample_id - args.start_sample_id)):
-            for j in range(args.end_sample_id - args.start_sample_id):
-                if i == j:
-                    continue
-                gap = lbprobs[str(i)+"_train"] - lbprobs[str(j)+"_train"]
-                flag = torch.logical_and(train_masks[i], torch.logical_not(train_masks[j]))
-                train_cnts += flag
-                train_mems += flag.float() * gap
+        correctness = np.vstack(correctness)
+        test_correctness = np.vstack(test_correctness)
 
-        train_mems = (train_mems / (train_cnts + 1e-8)).cpu()
-        indices = split_idx['train'].cpu().numpy()
-        results = [(int(indices[i]), float(train_mems[i])) for i in range(len(train_mems))]
-        results = sorted(results, key=lambda x:x[1], reverse=True)
-        with open(os.path.join(args.fold, "train.tsv"), 'w') as ops:
-            for i in range(len(results)):
-                idx, mem = results[i]
-                ops.write("{}\t{}\n".format(idx, mem))
+        if args.infl == 'max':
+            test_correctness = torch.from_numpy(test_correctness).float().to(device)
+            # (M, Tr)
+            trainset_mask = torch.from_numpy(trainset_mask).float().to(device)
+            inv_mask = torch.from_numpy(inv_mask).float().to(device)
+            eps = torch.zeros_like(torch.sum(trainset_mask, axis=0, keepdims=True)) + 1e-8
+            test_indices = torch.arange(len(split_idx['test'])).to(device)
+            max_infl = torch.zeros_like(split_idx['train'], dtype=torch.float32).to(device) - 1.5
 
+            def _masked_dot(x, mask, esp=1e-8):
+                return torch.matmul(x, mask) / torch.maximum(torch.sum(mask, axis=0, keepdims=True), esp)
+
+            for i in tqdm(range(0, len(test_indices), 16)):
+                batch_test_indices = test_indices[i:min(i+16, len(test_indices))]
+
+                # (B, M)
+                batch_test_correctness = test_correctness.T[batch_test_indices]
+
+                # (B, Tr)
+                batch_infl_est = _masked_dot(batch_test_correctness, trainset_mask, eps) - _masked_dot(batch_test_correctness, inv_mask, eps)
+
+                # (Tr, )
+                batch_max_infl = torch.max(batch_infl_est, 0)[0]
+
+                max_infl = torch.maximum(max_infl, batch_max_infl)
+
+            indices = split_idx['train'].numpy().tolist()
+            results = [(indices[i], float(max_infl[indices[i]].item())) for i in range(len(indices))]
+            results = sorted(results, key=lambda x:x[1], reverse=True)
+            with open(os.path.join("infl-{}".format(args.infl), "train.tsv"), 'w') as ops:
+                for i in range(len(results)):
+                    idx, infl = results[i]
+                    ops.write("{}\t{}\n".format(idx, infl))
+        elif args.infl == 'sum-abs':
+            raise NotImplementedError("Don't use this")
+        else:
+            def _masked_avg(x, mask, axis=0, esp=1e-10):
+                return (np.sum(x * mask, axis=axis) / np.maximum(np.sum(mask, axis=axis), esp)).astype(np.float32)
+
+            def _masked_dot(x, mask, esp=1e-10):
+                x = x.T.astype(np.float32)
+                return (np.matmul(x, mask) / np.maximum(np.sum(mask, axis=0, keepdims=True), esp)).astype(np.float32)
+
+            mem_est = _masked_avg(correctness, trainset_mask) - _masked_avg(correctness, inv_mask)
+            #indices = data.train_mask.nonzero().squeeze(-1).numpy()
+            indices = split_idx['train'].numpy().tolist()
+            results = [(indices[i], float(mem_est[indices[i]])) for i in range(len(indices))]
+            results = sorted(results, key=lambda x:x[1], reverse=True)
+            with open(os.path.join("mem", "train.tsv"), 'w') as ops:
+                for i in range(len(results)):
+                    idx, mem = results[i]
+                    ops.write("{}\t{}\n".format(idx, mem))
 
 
 if __name__ == "__main__":

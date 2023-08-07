@@ -11,8 +11,6 @@ from torch.utils.data import Dataset, DataLoader
 
 from ogb.nodeproppred import Evaluator
 
-from logger import Logger
-
 
 class SimpleDataset(Dataset):
     def __init__(self, x, y):
@@ -67,7 +65,7 @@ def infer(model, device, loader):
     for x, y in loader:
         x = x.to(device)
         out = model(x)
-        y_pred.append(torch.exp(out).cpu())
+        y_pred.append(torch.exp(out))
 
     y_pred = torch.cat(y_pred, 0)
     return y_pred
@@ -84,7 +82,7 @@ def main():
     parser.add_argument('--dropout', type=float, default=0)
     parser.add_argument('--batch_size', type=int, default=256)
     # exp relatead
-    parser.add_argument('--fold', type=str, default='el2n')
+    parser.add_argument('--fold', type=str, default='/mnt/ogb_datasets/ogbn_papers100M/ckpts')
     args = parser.parse_args()
     print(args)
 
@@ -112,7 +110,7 @@ def main():
             raise ValueError('No option to use node embedding and sgc embedding at the same time.')
         else:
             try:
-                sgc_dict = torch.load('sgc_dict.pt')
+                sgc_dict = torch.load('/mnt/ogb_datasets/ogbn_papers100M/sgc_dict.pt')
             except:
                 raise RuntimeError('sgc_dict.pt not found. Need to run python sgc.py first')
 
@@ -127,32 +125,28 @@ def main():
 
     train_loader = DataLoader(train_dataset, batch_size=args.batch_size,
                               shuffle=False)
-    valid_loader = DataLoader(valid_dataset, batch_size=128, shuffle=False)
-    test_loader = DataLoader(test_dataset, batch_size=128, shuffle=False)
 
     model = MLP(x.size(-1), args.hidden_channels, 172, args.num_layers,
                 args.dropout).to(device)
 
-    acc_train_prob = None
+    norms = .0
     cnt = 0
+    labels = F.one_hot(y[split_idx['train']].squeeze(1), num_classes=172).to(device)
+    print(labels.shape)
     for fn in os.listdir(args.fold):
         if fn.endswith(".pt"):
             content = torch.load(os.path.join(args.fold, fn), map_location=device)
             model.load_state_dict(content['model'])
             train_prob = infer(model, device, train_loader)
+            norm = torch.sum((train_prob - labels)**2, 1)
+            norms = norms + norm
             cnt += 1
-            if acc_train_prob is None:
-                acc_train_prob = train_prob
-            else:
-                acc_train_prob += train_prob
+    norms /= float(cnt)
+    norms = norms.cpu().numpy().tolist()
 
-    probs = acc_train_prob / float(cnt)
-    labels = F.one_hot(y[split_idx['train']].squeeze(1), num_classes=172)
-    l2norm = torch.sum((probs - labels.float())**2, 1)
-    indices = split_idx['train'].cpu().numpy()
-    results = [(int(indices[i]), float(l2norm[i])) for i in range(len(l2norm))]
+    results = [(int(i), float(norms[i])) for i in range(len(norms))]
     results = sorted(results, key=lambda x:x[1], reverse=True)
-    with open(os.path.join(args.fold, "train_el2n.tsv"), 'w') as ops:
+    with open(os.path.join("el2n", "train.tsv"), 'w') as ops:
         for i in range(len(results)):
             idx, norm = results[i]
             ops.write("{}\t{}\n".format(idx, norm))
